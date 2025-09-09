@@ -4,6 +4,8 @@ plugins {
     id "com.kauailabs.first.GradleRIO" version "2020.3.2.30"
 }
 
+toolchainsPlugin.withRaspbian()
+
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
 deploy {
@@ -23,7 +25,7 @@ deploy {
             // Debug can be overridden by command line, for use with VSCode
             debug = frc.getDebugOrDefault(false)
         }
-        // Built in artifact to deploy arbitrary files to the roboRIO.
+        // Built in artifact to deploy arbitrary files to the vmxpi.
         fileTreeArtifact('frcStaticFileDeploy') {
             // The directory below is the local directory to deploy
             files = fileTree(dir: 'src/main/deploy')
