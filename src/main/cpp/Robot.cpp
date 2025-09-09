@@ -8,6 +8,7 @@
 #include "Robot.h"
 #include "subsystems/AMCU.h"
 #include "utilities/LoggingSystem.h"
+#include "utilities/ShuffleboardData.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
@@ -21,6 +22,7 @@ constexpr Motor kMotorRight = MOTOR_2;
 constexpr Motor kMotorBack = MOTOR_3;
 
 AMCU amcu;
+ShuffleboardData loadData;
 
 studica::Servo* servo;
 void Robot::RobotInit() {

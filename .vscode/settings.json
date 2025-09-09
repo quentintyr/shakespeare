@@ -75,6 +75,8 @@
     "string": "cpp",
     "mutex": "cpp",
     "thread": "cpp",
-    "cinttypes": "cpp"
-  }
+    "cinttypes": "cpp",
+    "*.inc": "cpp"
+  },
+  "wpilib.autoStartRioLog": false
 }
