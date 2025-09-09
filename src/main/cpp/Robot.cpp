@@ -6,11 +6,29 @@
 /*----------------------------------------------------------------------------*/
 
 #include "Robot.h"
+#include "subsystems/AMCU.h"
+#include "utilities/LoggingSystem.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
-void Robot::RobotInit() {}
+#include "studica/Servo.h"
+
+constexpr int kWheelRadius = 50;
+constexpr int kRobotRadius = 150;
+constexpr Motor kMotorLeft = MOTOR_0;
+constexpr Motor kMotorRight = MOTOR_2;
+constexpr Motor kMotorBack = MOTOR_3;
+
+AMCU amcu;
+
+studica::Servo* servo;
+void Robot::RobotInit() {
+  SetupLogging();
+  LOG_INFO("Initialize Robot");
+  amcu.initOmniDriveBase(kWheelRadius, kRobotRadius, kMotorLeft, kMotorRight, kMotorBack);
+
+}
 
 /**
  * This function is called every robot packet, no matter the mode. Use
@@ -36,14 +54,37 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+  // amcu.driveDistance(2, 0, 0);
   m_autonomousCommand = m_container.GetAutonomousCommand();
+  try
+  {
+    if (m_autonomousCommand != nullptr) {
+      m_autonomousCommand->Schedule();
+    }
 
-  if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Schedule();
+    if(servo == nullptr)
+      servo = new studica::Servo(18);
+    }
+
+  catch(const std::exception& e)
+  {
+    std::cerr << e.what() << '\n';
   }
+
 }
 
-void Robot::AutonomousPeriodic() {}
+#include <iostream>
+
+float servoPos = 0.f;
+void Robot::AutonomousPeriodic() {
+  servo->Set(servoPos);
+  servoPos += 0.001;
+  if(servoPos > 1) {
+    servoPos = 0;   
+  }
+
+  std::cout << servoPos << std::endl;
+}
 
 void Robot::TeleopInit() {
   // This makes sure that the autonomous stops running when
