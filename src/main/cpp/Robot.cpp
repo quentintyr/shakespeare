@@ -58,14 +58,14 @@ void Robot::RobotInit() {
 void Robot::RobotPeriodic() { 
   frc2::CommandScheduler::GetInstance().Run(); 
     
-  bool notPressed;
+  bool isPressed;
   if (stopBottom == nullptr) {
-    notPressed = false;  // default if not connected
+    isPressed = false;  // default if not connected
   } else {
-    notPressed = !stopBottom->Get();
+    isPressed = !stopBottom->Get();
   }
 
-  if (!notPressed) {
+  if (isPressed == true) {
     LOG_INFO("pressed switch");
   }
     
