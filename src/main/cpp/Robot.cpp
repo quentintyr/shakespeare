@@ -12,9 +12,12 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
+#include <frc/DigitalInput.h>
 
 #include "studica/Servo.h"
+#include <iostream>
 
+float servoPos = 0.f;
 constexpr int kWheelRadius = 50;
 constexpr int kRobotRadius = 150;
 constexpr Motor kMotorLeft = MOTOR_0;
@@ -25,10 +28,22 @@ AMCU amcu;
 ShuffleboardData loadData;
 
 studica::Servo* servo;
+frc::DigitalInput* stopBottom;
+
 void Robot::RobotInit() {
   SetupLogging();
   LOG_INFO("Initialize Robot");
   amcu.initOmniDriveBase(kWheelRadius, kRobotRadius, kMotorLeft, kMotorRight, kMotorBack);
+  try
+  {
+    if(stopBottom == nullptr)
+      stopBottom = new frc::DigitalInput(8);
+    }
+
+  catch(const std::exception& e)
+  {
+    std::cerr << e.what() << '\n';
+  }
 
 }
 
@@ -40,7 +55,21 @@ void Robot::RobotInit() {
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
+void Robot::RobotPeriodic() { 
+  frc2::CommandScheduler::GetInstance().Run(); 
+    
+  bool notPressed;
+  if (stopBottom == nullptr) {
+    notPressed = false;  // default if not connected
+  } else {
+    notPressed = !stopBottom->Get();
+  }
+
+  if (!notPressed) {
+    LOG_INFO("pressed switch");
+  }
+    
+}
 
 /**
  * This function is called once each time the robot enters Disabled mode. You
@@ -58,26 +87,25 @@ void Robot::DisabledPeriodic() {}
 void Robot::AutonomousInit() {
   // amcu.driveDistance(2, 0, 0);
   m_autonomousCommand = m_container.GetAutonomousCommand();
-  try
-  {
+
     if (m_autonomousCommand != nullptr) {
       m_autonomousCommand->Schedule();
     }
+// try
+//   {
+//     if(servo == nullptr)
+//       servo = new studica::Servo(18);
+//     }
 
-    if(servo == nullptr)
-      servo = new studica::Servo(18);
-    }
-
-  catch(const std::exception& e)
-  {
-    std::cerr << e.what() << '\n';
-  }
+//   catch(const std::exception& e)
+//   {
+//     std::cerr << e.what() << '\n';
+//   }
 
 }
 
-#include <iostream>
 
-float servoPos = 0.f;
+
 void Robot::AutonomousPeriodic() {
   servo->Set(servoPos);
   servoPos += 0.001;

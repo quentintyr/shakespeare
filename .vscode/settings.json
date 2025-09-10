@@ -78,5 +78,6 @@
     "cinttypes": "cpp",
     "*.inc": "cpp"
   },
-  "wpilib.autoStartRioLog": false
+  "wpilib.autoStartRioLog": false,
+  "git.ignoreLimitWarning": true
 }
