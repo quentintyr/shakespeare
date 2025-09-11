@@ -14,6 +14,7 @@
 
 class Robot : public frc::TimedRobot {
  public:
+  double getDistance();
   void RobotInit() override;
   void RobotPeriodic() override;
   void DisabledInit() override;
