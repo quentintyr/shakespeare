@@ -23,10 +23,15 @@ constexpr Motor kMotorBack = MOTOR_3;
 AMCU amcu;
 
 studica::Servo* servo;
+frc::PWM* myServo;
 void Robot::RobotInit() {
   SetupLogging();
   LOG_INFO("Initialize Robot");
   amcu.initOmniDriveBase(kWheelRadius, kRobotRadius, kMotorLeft, kMotorRight, kMotorBack);
+
+  if(servo == nullptr)
+      myServo = new frc::PWM(21);
+    
 
 }
 
@@ -38,7 +43,13 @@ void Robot::RobotInit() {
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
+void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); 
+myServo->SetSpeed(-0.3);
+float output = myServo->GetPosition();
+LOG_INFO(output);
+
+
+}
 
 /**
  * This function is called once each time the robot enters Disabled mode. You
@@ -61,11 +72,7 @@ void Robot::AutonomousInit() {
     if (m_autonomousCommand != nullptr) {
       m_autonomousCommand->Schedule();
     }
-
-    if(servo == nullptr)
-      servo = new studica::Servo(18);
-    }
-
+  }
   catch(const std::exception& e)
   {
     std::cerr << e.what() << '\n';
@@ -77,13 +84,14 @@ void Robot::AutonomousInit() {
 
 float servoPos = 0.f;
 void Robot::AutonomousPeriodic() {
-  servo->Set(servoPos);
-  servoPos += 0.001;
-  if(servoPos > 1) {
-    servoPos = 0;   
-  }
+  // servo->Set(servoPos);
+  // servoPos += 0.001;
+  // if(servoPos > 1) {
+  //   servoPos = 0;   
+  // }
 
-  std::cout << servoPos << std::endl;
+  // std::cout << servoPos << std::endl;
+  
 }
 
 void Robot::TeleopInit() {
