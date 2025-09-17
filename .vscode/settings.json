@@ -76,7 +76,8 @@
     "mutex": "cpp",
     "thread": "cpp",
     "cinttypes": "cpp",
-    "*.inc": "cpp"
+    "*.inc": "cpp",
+    "queue": "cpp"
   },
   "wpilib.autoStartRioLog": false,
   "git.ignoreLimitWarning": true
