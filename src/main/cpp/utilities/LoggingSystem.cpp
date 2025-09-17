@@ -1,11 +1,12 @@
 #include "utilities/LoggingSystem.h"
+#include "Constants.h"
 #include <fstream>
 
-ModeInfo last_mode = {RESET, "[INIT]"};
+ModeInfo last_mode = {LOG_RESET, "[INIT]"};
 std::ofstream logFile;
 
 void SetupLogging() {
-    logFile.open("/home/pi/robot.log", std::ios::out | std::ios::app);
+    logFile.open(Constants::FILE_PATH, std::ios::out | std::ios::app);
     std::cout.rdbuf(logFile.rdbuf());
     std::cerr.rdbuf(logFile.rdbuf());
 }

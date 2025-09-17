@@ -7,14 +7,14 @@
 #include <ctime>
 #include <iomanip>
 
-#define RESET   "\033[0m"
-#define RED     "\033[31m"
-#define YELLOW  "\033[33m"
-#define GREEN   "\033[32m"
-#define CYAN    "\033[36m"
-#define BLUE    "\033[34m"
-#define PURPLE  "\033[35m"
-#define WHITE   "\033[37m"
+#define LOG_RESET   "\033[0m"
+#define LOG_RED     "\033[31m"
+#define LOG_YELLOW  "\033[33m"
+#define LOG_GREEN   "\033[32m"
+#define LOG_CYAN    "\033[36m"
+#define LOG_BLUE    "\033[34m"
+#define LOG_PURPLE  "\033[35m"
+#define LOG_WHITE   "\033[37m"
 
 #define BOLD        "\033[1m"
 #define bold_res    "\033[22m"
@@ -45,12 +45,12 @@ inline std::string current_time() {
 }
 
 // default log infos
-#define LOG_INFO(value)    { std::cout << "[" << current_time() << "] " << BOLD << GREEN   << "[INFO] "  << RESET << value << std::endl; }
-#define LOG_WARN(value)    { std::cout << "[" << current_time() << "] " << YELLOW  << "[WARN] "  << RESET << value << std::endl; }
-#define LOG_ERROR(value)   { std::cerr << "[" << current_time() << "] " << RED     << "[ERROR] " << RESET << value << std::endl; }
+#define LOG_INFO(value)    { std::cout << "[" << current_time() << "] " << BOLD << LOG_GREEN   << "[INFO] "  << LOG_RESET << value << std::endl; }
+#define LOG_WARN(value)    { std::cout << "[" << current_time() << "] " << LOG_YELLOW  << "[WARN] "  << LOG_RESET << value << std::endl; }
+#define LOG_ERROR(value)   { std::cerr << "[" << current_time() << "] " << LOG_RED     << "[ERROR] " << LOG_RESET << value << std::endl; }
 
 // mode log infos
-#define LOG_AUTONOMOUS(value)   { std::cout << "[" << current_time() << "] " << PURPLE << "[AUTONOMOUS] "    << RESET << value << std::endl; }
-#define LOG_TELEOP(value)       { std::cout << "[" << current_time() << "] " << CYAN   << "[TELEOP] "        << RESET << value << std::endl; }
-#define LOG_TEST(value)         { std::cout << "[" << current_time() << "] " << YELLOW << "[TEST] "          << RESET << value << std::endl; }
-#define LOG_DISABLED(value)     { std::cout << "[" << current_time() << "] " << last_mode.color << last_mode.name << RESET << value << std::endl; }
+#define LOG_AUTONOMOUS(value)   { std::cout << "[" << current_time() << "] " << LOG_PURPLE << "[AUTONOMOUS] "    << LOG_RESET << value << std::endl; }
+#define LOG_TELEOP(value)       { std::cout << "[" << current_time() << "] " << LOG_CYAN   << "[TELEOP] "        << LOG_RESET << value << std::endl; }
+#define LOG_TEST(value)         { std::cout << "[" << current_time() << "] " << LOG_YELLOW << "[TEST] "          << LOG_RESET << value << std::endl; }
+#define LOG_DISABLED(value)     { std::cout << "[" << current_time() << "] " << last_mode.color << last_mode.name << LOG_RESET << value << std::endl; }
