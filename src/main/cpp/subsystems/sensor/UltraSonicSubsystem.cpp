@@ -41,7 +41,6 @@ void UltraSonicSubsystem::UltraSonicWorker()
         {
             double leftValue = getMedian(sideLeftValueList);
             sideLeftValueList.erase(sideLeftValueList.begin());
-            LOG_INFO(leftValue);
         }
         if (sideRightValueList.size() >= 9)
         {
@@ -56,7 +55,7 @@ void UltraSonicSubsystem::UltraSonicWorker()
 
 void UltraSonicSubsystem::UltraSonicStartThread()
 {
-    LOG_INFO("Starting Ultra Sonic Thread...");
+    LOG_THREAD("Sensors initialized.");
     workerThread = std::thread(&UltraSonicSubsystem::UltraSonicWorker, this);
 }
 

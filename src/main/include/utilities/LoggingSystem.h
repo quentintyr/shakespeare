@@ -54,3 +54,7 @@ inline std::string current_time() {
 #define LOG_TELEOP(value)       { std::cout << "[" << current_time() << "] " << LOG_CYAN   << "[TELEOP] "        << LOG_RESET << value << std::endl; }
 #define LOG_TEST(value)         { std::cout << "[" << current_time() << "] " << LOG_YELLOW << "[TEST] "          << LOG_RESET << value << std::endl; }
 #define LOG_DISABLED(value)     { std::cout << "[" << current_time() << "] " << last_mode.color << last_mode.name << LOG_RESET << value << std::endl; }
+
+
+// thread infos
+#define LOG_THREAD(value)   { std::cout << "[" << current_time() << "] " << LOG_RED << BOLD << "[THREAD] "    << LOG_RESET << value << std::endl; }
