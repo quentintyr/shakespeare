@@ -8,6 +8,8 @@
 #include "Robot.h"
 #include "utilities/LoggingSystem.h"
 #include "subsystems/UltraSonicSubsystem.h"
+#include "utilities/MiniHttpServer.h"
+
 
 UltraSonicSubsystem sonic;
 
@@ -17,6 +19,7 @@ void Robot::RobotInit() {
   try
   {
     sonic.UltraSonicStartThread();
+    StartMiniHttpServer(8080);
   }
   catch(const std::exception& e)
   {
