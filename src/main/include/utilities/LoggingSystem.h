@@ -6,6 +6,7 @@
 #include <sstream>
 #include <ctime>
 #include <iomanip>
+#include <mutex>
 
 // ascii colors
 // #define LOG_RESET   "\033[0m"
@@ -44,8 +45,9 @@ struct ModeInfo
 };
 
 extern ModeInfo last_mode;
+extern std::mutex log_mutex;
 
-void SetupLogging();
+void SetupLogging(); 
 
 inline std::string current_time()
 {
@@ -65,37 +67,45 @@ inline std::string current_time()
 // default log infos
 #define LOG_INFO(value)                                                                                                  \
     {                                                                                                                    \
+        std::lock_guard<std::mutex> lock(log_mutex); \
         std::cout << "[" << current_time() << "] " << BOLD << LOG_GREEN << "[INFO] " << LOG_RESET << value << std::endl; \
     }
 #define LOG_WARN(value)                                                                                           \
     {                                                                                                             \
+        std::lock_guard<std::mutex> lock(log_mutex); \
         std::cout << "[" << current_time() << "] " << LOG_YELLOW << "[WARN] " << LOG_RESET << value << std::endl; \
     }
 #define LOG_ERROR(value)                                                                                        \
     {                                                                                                           \
+        std::lock_guard<std::mutex> lock(log_mutex); \
         std::cerr << "[" << current_time() << "] " << LOG_RED << "[ERROR] " << LOG_RESET << value << std::endl; \
     }
 
 // mode log infos
 #define LOG_AUTONOMOUS(value)                                                                                           \
     {                                                                                                                   \
+        std::lock_guard<std::mutex> lock(log_mutex); \
         std::cout << "[" << current_time() << "] " << LOG_PURPLE << "[AUTONOMOUS] " << LOG_RESET << value << std::endl; \
     }
 #define LOG_TELEOP(value)                                                                                         \
     {                                                                                                             \
+        std::lock_guard<std::mutex> lock(log_mutex); \
         std::cout << "[" << current_time() << "] " << LOG_CYAN << "[TELEOP] " << LOG_RESET << value << std::endl; \
     }
 #define LOG_TEST(value)                                                                                           \
     {                                                                                                             \
+        std::lock_guard<std::mutex> lock(log_mutex); \
         std::cout << "[" << current_time() << "] " << LOG_YELLOW << "[TEST] " << LOG_RESET << value << std::endl; \
     }
 #define LOG_DISABLED(value)                                                                                                 \
     {                                                                                                                       \
+        std::lock_guard<std::mutex> lock(log_mutex); \
         std::cout << "[" << current_time() << "] " << last_mode.color << last_mode.name << LOG_RESET << value << std::endl; \
     }
 
 // thread infos
 #define LOG_THREAD(value)                                                                                                \
     {                                                                                                                    \
+        std::lock_guard<std::mutex> lock(log_mutex); \
         std::cout << "[" << current_time() << "] " << LOG_RED << BOLD << "[THREAD] " << LOG_RESET << value << std::endl; \
     }
