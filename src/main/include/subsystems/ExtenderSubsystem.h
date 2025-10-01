@@ -12,9 +12,10 @@ enum class ExtenderState {
 class ExtenderSubsystem {
 public:
     ExtenderSubsystem();
-    InitExtenderSubsystem();
+    void ExtenderSubsystemCurrentState();
+    void Periodic();
     double getMaxTimeFrontToBack();
 private:
     ExtenderState currentState = ExtenderState::Idle;
-    double MaxTimeFronToBack = 0.0;
+    double MaxTimeFrontToBack = 0.0;
 };
