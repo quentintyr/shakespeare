@@ -2,9 +2,12 @@
 #include "Constants.h"
 #include <fstream>
 #include <cstdio>
+#include <mutex>
+
 
 ModeInfo last_mode = {LOG_RESET, "[INIT]"};
 std::ofstream logFile;
+std::mutex log_mutex;
 
 void SetupLogging() {
     std::remove(Constants::FILE_PATH);
