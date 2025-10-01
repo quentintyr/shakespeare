@@ -12,12 +12,15 @@
   <script>
     async function updateLog() {
       try {
+        const logElem = document.getElementById('robot-log');
+        const wasAtBottom = logElem.scrollHeight - logElem.scrollTop <= logElem.clientHeight + 5;
         const resp = await fetch('robot.log', {cache: "no-store"});
         if (!resp.ok) throw new Error('No log file');
         const text = await resp.text();
-        document.getElementById('robot-log').innerHTML = text;
-        // Scroll to bottom to show the latest log lines
-        document.getElementById('robot-log').scrollTop = document.getElementById('robot-log').scrollHeight;
+        logElem.innerHTML = text;
+        if (wasAtBottom) {
+          logElem.scrollTop = logElem.scrollHeight;
+        }
       } catch (e) {
         document.getElementById('robot-log').textContent = "Unable to fetch log";
       }
