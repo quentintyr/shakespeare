@@ -8,8 +8,8 @@
 #include "Robot.h"
 #include "utilities/LoggingSystem.h"
 #include "subsystems/UltraSonicSubsystem.h"
-#include "subsystems/LidarSubsystem.h"
-#include "subsystems/ExtenderSubsystem.h"
+#include "utilities/MiniHttpServer.h"
+
 
 UltraSonicSubsystem sonic;
 ExtenderSubsystem extender;
@@ -18,8 +18,17 @@ ExtenderSubsystem extender;
 void Robot::RobotInit() {
   SetupLogging();
   LOG_INFO("Initializing Robot...");
-  sonic.UltraSonicStartThread();
-
+  try
+  {
+    sonic.UltraSonicStartThread();
+    StartMiniHttpServer(8080);
+  }
+  catch(const std::exception& e)
+  {
+    std::cerr << e.what() << '\n';
+  }
+  
+  
   }
   
 
