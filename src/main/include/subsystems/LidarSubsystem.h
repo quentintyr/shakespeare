@@ -21,11 +21,7 @@ public:
 private:
     // void UltraSonicWorker();
     double getMedian();
+    double getAngle();
+    double getDistance();
 
-    // frc::Ultrasonic *sideRight;
-    // frc::Ultrasonic *sideLeft;
-    // std::vector<double> sideLeftValueList;
-    // std::vector<double> sideRightValueList;
-    // std::thread workerThread;
-    // std::atomic<bool> stopThread;
 };

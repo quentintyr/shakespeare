@@ -2,35 +2,34 @@
 #include "utilities/LoggingSystem.h"
 #include "studica/Cobra.h"
 
+#include <sstream>  
+#include <string>   
+
 studica::Lidar lidar{studica::Lidar::Port::kUSB1};
 
-// Scan data
- struct
-studica::Lidar::ScanData getLidarData;
-
 LidarSubsystem::LidarSubsystem() {
-
     lidar.Start();
     lidar.EnableFilter(studica::Lidar::Filter::kMEDIAN, true);
 
-    std::string logMsg << "Angle: " << getLidarData.angle[180] << "˚, Distance: " << getLidarData.distance[180] / 10 << "cm" << std::endl; 
+    studica::Lidar::ScanData scanData = lidar.GetData();
+
+    std::stringstream ss;
+    ss << "Angle: " << scanData.angle[180] << ", Distance: " << scanData.distance[180] / 10 << "cm";
+    std::string logMsg = ss.str();
     LOG_INFO(logMsg);
 }
 
-
-double LidarSubsystem::getMedian()
-{
-    double getLidarData = lidar.GetData();
-    return getLidarData;
+double LidarSubsystem::getDistance() {
+    studica::Lidar::ScanData data = lidar.GetData();
+    return data.distance[180] / 10.0;  // Convert mm to cm
 }
 
-double LidarSubsystem::getAngle()
-{
-
+double LidarSubsystem::getAngle() {
+    studica::Lidar::ScanData data = lidar.GetData();
+    return data.angle[180];
 }
 
-double LidarSubsystem::getDistance()
-{
-
-}
-
+// double LidarSubsystem::getMedianOffAngle() {
+//     studica::Lidar::ScanData data = lidar.GetData();
+//     return data.distance[170] / 10.0;  // Example: distance at 170 degrees
+// }
