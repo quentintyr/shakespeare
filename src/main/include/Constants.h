@@ -13,6 +13,8 @@
 namespace Constants {
         // logfile path
         inline constexpr const char* FILE_PATH = "/home/pi/robot.log";
+        // widget logfile
+        inline constexpr const char* WIDGET_FILE_PATH = "home/pi/widgets.log";
         // amcu constants
         inline constexpr int kWheelRadius = 50;
         inline constexpr int kRobotRadius = 150;
@@ -40,6 +42,30 @@ namespace Constants {
         inline constexpr int ELEVEVATOR_UPDOWN_PORT = 13;
         inline constexpr int ELEVATOR_ROTATE_PORT = 14;
 
+        //   motor ... the number of the motor (0,2 or 3, motor 1 does not have interrupts)
+        // elevator top limit switch
+
+        //   high ... switch low (0) or switch high (1)
+        inline constexpr int topHigh = 1;
+        inline constexpr int bottomLow = 0;
+
+        //   enable ... enable (1) or disable (0) the switch
+        inline constexpr int topEnable = 1;
+        inline constexpr int bottomEnable = 1;
+
+        //   mode ... normally open (0) or normally closed (1) ) or deactivated(0)
+        inline constexpr int topMode = 1;
+        inline constexpr int bottomMode = 1;
+
+        // bounce ... enabled(1) or disabled(0)
+        inline constexpr int topBounce = 1;
+        inline constexpr int bottomBounce = 1;
+
+        // elevator bottom limit switch
+        
+       
+        
+        
 
         // extender
         inline constexpr int EXTENDER_SERVO_PORT = 18;

@@ -13,7 +13,7 @@
 #define WIDGET_LOG_WHITE  "<span style=\"color:#FFFFFF\">"
 #define WIDGET_LOG_YELLOW "<span style=\"color:#FFFF00\">"
 
-extern std::mutex log_mutex;
+extern std::mutex widget_log_mutex;
 
 void SetupLogWidgets();
 
@@ -35,6 +35,6 @@ inline std::string current_time()
 
 #define WIDGET_LOG_INFO(value)                                                                                                  \
     {                                                                                                                    \
-        std::lock_guard<std::mutex> lock(log_mutex); \
+        std::lock_guard<std::mutex> lock(widget_log_mutex); \
         std::cout << "[" << current_time() << "] " << BOLD << WIDGET_LOG_YELLOW << "[WIDGET INFO] " << WIDGET_LOG_RESET << value << std::endl; \
     }

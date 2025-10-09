@@ -6,11 +6,11 @@
 #include <mutex>
 
 std::ofstream widgetLogFile;
-std::mutex log_mutex;
+std::mutex widget_log_mutex;
 
-void SetupLogging() {
+void SetupLogWidgets() {
     std::remove(Constants::WIDGET_FILE_PATH);
-    logFile.open(Constants::WIDGET_FILE_PATH, std::ios::out);
-    std::cout.rdbuf(logFile.rdbuf());
-    std::cerr.rdbuf(logFile.rdbuf());
+    widgetLogFile.open(Constants::WIDGET_FILE_PATH, std::ios::out);
+    std::cout.rdbuf(widgetLogFile.rdbuf());
+    std::cerr.rdbuf(widgetLogFile.rdbuf());
 }
