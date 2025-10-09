@@ -56,22 +56,22 @@ void motorHandler() {
 
         // help
         if(!calibrating && !driveFromLimitSwitchToZero && targetRPM != prevRPM) {
-            acmu->setRPM(MOTOR_3, targetRPM);
+            acmu->setRPM(MOTOR_0, targetRPM);
             prevRPM = targetRPM;
         }
         
         float currentPos = ElevatorSubsystem::currentPos.load();
-        int newEncoderSteps = acmu->getEncoder(MOTOR_3) - prevEncoderSteps;
+        int newEncoderSteps = acmu->getEncoder(MOTOR_0) - prevEncoderSteps;
         ElevatorSubsystem::currentPos.store(currentPos + ((newEncoderSteps * ELEVATOR_PINION_RADIUS) / ENCODER_TICKS_PER_REVOLUTION));
         prevEncoderSteps += newEncoderSteps;
 
-        // when true top moving to zero
+        // when true top moving to zero#
         if(driveFromLimitSwitchToZero) {
             if(ElevatorSubsystem::currentPos >= 0) {
-                acmu->setRPM(MOTOR_3, 0);
+                acmu->setRPM(MOTOR_0, 0);
                 driveFromLimitSwitchToZero.store(false);
             }else if(newEncoderSteps < 5) {
-                acmu->setRPM(MOTOR_3, 30);
+                acmu->setRPM(MOTOR_0, 30);
                 std::this_thread::sleep_for(std::chrono::milliseconds(10));
             }
         }
@@ -94,7 +94,7 @@ void ElevatorSubsystem::destroy() {
 void ElevatorSubsystem::init(AMCU* p_acmu) {
     // init when the robot is starting
     acmu = p_acmu;
-    acmu->setLimitSwitches(MOTOR_3, 0, 1, 0, 0);
+    acmu->setLimitSwitches(MOTOR_0, 0, 1, 0, 0);
     acmu->registerLimitSwitchCallback(&limitswitchcallback);
 
     // starting the thread with the motorHandler function
@@ -109,7 +109,7 @@ void ElevatorSubsystem::moveTo(const float p_targetPos) {
 // calibrating the ElevatorSubsystem motor
 void ElevatorSubsystem::calibrate() {
     frc::SmartDashboard::PutString("calibrating", "ElevatorSubsystem");
-    acmu->setRPM(MOTOR_3, -15); // always drive down when calibrating to press limit switch
+    acmu->setRPM(MOTOR_0, -15); // always drive down when calibrating to press limit switch
     // setting bool for calibration to true
     calibrating.store(true);
 }
@@ -118,7 +118,7 @@ void ElevatorSubsystem::calibrate() {
 void ElevatorSubsystem::limitswitchcallback(uint8_t motorNr, uint8_t high) {
     // check if the calibrating is true
     if(calibrating.load()) {
-        acmu->setRPM(MOTOR_3, 30);
+        acmu->setRPM(MOTOR_0, 30);
         currentPos.store(-0.8f);
         calibrating.store(false);
         driveFromLimitSwitchToZero.store(true); // set true 
