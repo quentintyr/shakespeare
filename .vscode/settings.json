@@ -77,7 +77,14 @@
     "thread": "cpp",
     "cinttypes": "cpp",
     "*.inc": "cpp",
-    "queue": "cpp"
+    "queue": "cpp",
+    "any": "cpp",
+    "regex": "cpp",
+    "codecvt": "cpp",
+    "csignal": "cpp",
+    "forward_list": "cpp",
+    "future": "cpp",
+    "valarray": "cpp"
   },
   "wpilib.autoStartRioLog": false,
   "git.ignoreLimitWarning": true

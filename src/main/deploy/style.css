@@ -148,3 +148,56 @@ h1 {
   .widget-label { font-size: 0.89rem; }
   .widgets-container { gap: 0.5rem; }
 }
+
+/* Status indicator colors */
+.widget-status.ok {
+  background-color: #4CAF50; /* Green */
+}
+
+.widget-status.busy {
+  background-color: #FF9800; /* Orange */
+}
+
+.widget-status.error {
+  background-color: #F44336; /* Red */
+}
+
+.widget-status.idle {
+  background-color: #9E9E9E; /* Gray */
+}
+
+/* Robot mode indicator */
+.mode-indicator {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.mode-indicator.disabled {
+  background-color: #9E9E9E;
+  color: white;
+}
+
+.mode-indicator.autonomous {
+  background-color: #FF9800;
+  color: white;
+}
+
+.mode-indicator.teleop {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.mode-indicator.test {
+  background-color: #2196F3;
+  color: white;
+}
+
+/* Log styling */
+.log-error { color: #F44336; }
+.log-success { color: #4CAF50; }
+.log-warning { color: #FF9800; }
+.log-info { color: #2196F3; }
+.log-debug { color: #9C27B0; }
+.log-thread { color: #00BCD4; }

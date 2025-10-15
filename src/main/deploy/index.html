@@ -7,121 +7,292 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>FRC Robot Dashboard</h1>
+  <div class="header">
+    <h1>FRC Robot Dashboard</h1>
+    <div class="connection-status">
+      <div id="connection-indicator" class="connection-indicator disconnected"></div>
+      <span id="connection-status">Disconnected</span>
+      <div id="robot-mode" class="mode-indicator unknown">UNKNOWN</div>
+    </div>
+  </div>
+
   <div class="dashboard">
     <div class="logs-section">
       <div class="log-title">Robot Logs</div>
       <div class="log-container" id="robot-log">Loading log...</div>
     </div>
+    
     <div class="widgets-main">
       <div class="widgets-section">
         <div class="widget-title">Hardware Status</div>
-        <div class="widgets-container" id="hardware-widgets"></div>
+        <div class="widgets-container" id="hardware-widgets">
+          <div class="widget" id="sonic-left">
+            <div class="widget-label">Sonic Left</div>
+            <div class="widget-status idle"></div>
+            <div class="widget-value">--</div>
+          </div>
+          <div class="widget" id="sonic-right">
+            <div class="widget-label">Sonic Right</div>
+            <div class="widget-status idle"></div>
+            <div class="widget-value">--</div>
+          </div>
+          <div class="widget" id="ir-left">
+            <div class="widget-label">IR Left</div>
+            <div class="widget-status idle"></div>
+            <div class="widget-value">--</div>
+          </div>
+          <div class="widget" id="ir-right">
+            <div class="widget-label">IR Right</div>
+            <div class="widget-status idle"></div>
+            <div class="widget-value">--</div>
+          </div>
+          <div class="widget" id="lidar">
+            <div class="widget-label">Lidar</div>
+            <div class="widget-status idle"></div>
+            <div class="widget-value">--</div>
+          </div>
+          <div class="widget" id="battery">
+            <div class="widget-label">Battery</div>
+            <div class="widget-status idle"></div>
+            <div class="widget-value">--</div>
+          </div>
+        </div>
       </div>
+
       <div class="widgets-section">
         <div class="widget-title">Subsystem Status</div>
-        <div class="widgets-container" id="subsystem-widgets"></div>
+        <div class="widgets-container" id="subsystem-widgets">
+          <div class="widget" id="extender">
+            <div class="widget-label">Extender</div>
+            <div class="widget-status idle"></div>
+            <div class="widget-value">--</div>
+          </div>
+          <div class="widget" id="elevator">
+            <div class="widget-label">Elevator</div>
+            <div class="widget-status idle"></div>
+            <div class="widget-value">--</div>
+          </div>
+          <div class="widget" id="gripper">
+            <div class="widget-label">Gripper</div>
+            <div class="widget-status idle"></div>
+            <div class="widget-value">--</div>
+          </div>
+          <div class="widget" id="arm">
+            <div class="widget-label">Arm</div>
+            <div class="widget-status idle"></div>
+            <div class="widget-value">--</div>
+          </div>
+          <div class="widget" id="vision">
+            <div class="widget-label">Vision</div>
+            <div class="widget-status idle"></div>
+            <div class="widget-value">--</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
   <script>
-    // Separate the hardware and subsystem widgets if needed
-    const hardwareWidgets = [
-      { id: 'lidar', label: 'Lidar' },
-      { id: 'irLeft', label: 'IR Left' },
-      { id: 'irRight', label: 'IR Right' },
-      { id: 'sonicLeft', label: 'Sonic Left' },
-      { id: 'sonicRight', label: 'Sonic Right' }
-    ];
+    let isConnected = false;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
 
-    const subsystemWidgets = [
-      { id: 'arm', label: 'Arm' },
-      { id: 'gripper', label: 'Gripper' },
-      { id: 'elevator', label: 'Elevator' },
-      { id: 'extender', label: 'Extender' },
-      { id: 'vision', label: 'Vision' }
-    ];
-
-    function statusToClass(status) {
-      if (status === "ok" || status === "ready" || status === "idle") return "status-green";
-      if (status === "busy" || status === "working") return "status-yellow";
-      return "status-red";
+    function updateConnectionStatus(connected) {
+        const indicator = document.getElementById('connection-indicator');
+        const status = document.getElementById('connection-status');
+        
+        if (connected) {
+            indicator.className = 'connection-indicator connected';
+            status.textContent = 'Connected';
+            isConnected = true;
+            reconnectAttempts = 0;
+        } else {
+            indicator.className = 'connection-indicator disconnected';
+            status.textContent = 'Disconnected';
+            isConnected = false;
+        }
     }
 
-    function getWidgetValue(id, data) {
-      switch(id) {
-        case "lidar":
-          return data.lidar && data.lidar.distance !== undefined ? `Distance: ${data.lidar.distance}m` : "";
-        case "irLeft":
-          return data.irLeft && data.irLeft.distance !== undefined ? `Distance: ${data.irLeft.distance}m` : "";
-        case "irRight":
-          return data.irRight && data.irRight.distance !== undefined ? `Distance: ${data.irRight.distance}m` : "";
-        case "sonicLeft":
-          return data.sonicLeft && data.sonicLeft.distance !== undefined ? `Distance: ${data.sonicLeft.distance}m` : "";
-        case "sonicRight":
-          return data.sonicRight && data.sonicRight.distance !== undefined ? `Distance: ${data.sonicRight.distance}m` : "";
-        case "arm":
-          return data.arm && data.arm.position ? `Position: ${data.arm.position}` : "";
-        case "gripper":
-          return data.gripper && data.gripper.apple_gripped ? "Apple Gripped" : "Not Gripped";
-        case "elevator":
-          return data.elevator && data.elevator.position ? `Position: ${data.elevator.position}` : "";
-        case "extender":
-          return data.extender && data.extender.length !== undefined ? `Length: ${data.extender.length}m` : "";
-        case "vision":
-          return data.vision && data.vision.apple_detected ? "Apple Seen" : "Not Seen";
-        default:
-          return "";
-      }
+    function updateWidget(id, status, value, unit = '') {
+        const widget = document.getElementById(id);
+        if (!widget) return;
+        
+        const statusElement = widget.querySelector('.widget-status');
+        const valueElement = widget.querySelector('.widget-value');
+        
+        // Update status indicator
+        if (statusElement) {
+            statusElement.className = `widget-status ${status}`;
+        }
+        
+        // Update value
+        if (valueElement) {
+            if (unit) {
+                valueElement.textContent = `${value}${unit}`;
+            } else {
+                valueElement.textContent = value;
+            }
+        }
     }
 
-    function renderWidgets(widgetList, containerId, data) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      widgetList.forEach(widget => {
-        const status = data[widget.id]?.status || "error";
-        const value = getWidgetValue(widget.id, data);
-        const statusClass = statusToClass(status);
-        container.innerHTML += `
-          <div class="widget ${statusClass}">
-            <div class="widget-label">${widget.label}</div>
-            <div class="widget-value">${value}</div>
-          </div>
-        `;
-      });
+    function fetchRobotData() {
+        // Fetch from the JSON file your SimpleJsonWriter creates
+        fetch('status.json', {cache: "no-store"})
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                updateConnectionStatus(true);
+                updateDashboard(data);
+            })
+            .catch(error => {
+                console.error('Error fetching robot data:', error);
+                updateConnectionStatus(false);
+                
+                // Try to reconnect
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    setTimeout(fetchRobotData, 2000);
+                }
+            });
     }
 
-    async function updateLog() {
-      try {
-        const logElem = document.getElementById('robot-log');
-        const wasAtBottom = logElem.scrollHeight - logElem.scrollTop <= logElem.clientHeight + 5;
-        const resp = await fetch('robot.log', {cache: "no-store"});
-        if (!resp.ok) throw new Error('No log file');
-        const text = await resp.text();
-        logElem.innerHTML = text;
-        if (wasAtBottom) logElem.scrollTop = logElem.scrollHeight;
-      } catch (e) {
-        document.getElementById('robot-log').textContent = "Unable to fetch log";
-      }
+    function updateDashboard(data) {
+        // Update Hardware Widgets (Sensors)
+        
+        // Ultrasonic Sensors
+        if (data.USSensorLeft !== undefined) {
+            const leftStatus = data.USSensorLeft > 0 ? 'ok' : 'error';
+            updateWidget('sonic-left', leftStatus, data.USSensorLeft, 'cm');
+        }
+        
+        if (data.USSensorRight !== undefined) {
+            const rightStatus = data.USSensorRight > 0 ? 'ok' : 'error';
+            updateWidget('sonic-right', rightStatus, data.USSensorRight, 'cm');
+        }
+        
+        // IR Sensors
+        if (data.IRSensorLeft !== undefined) {
+            const leftIRStatus = data.IRSensorLeft > 0 ? 'ok' : 'idle';
+            updateWidget('ir-left', leftIRStatus, data.IRSensorLeft, 'cm');
+        }
+        
+        if (data.IRSensorRight !== undefined) {
+            const rightIRStatus = data.IRSensorRight > 0 ? 'ok' : 'idle';
+            updateWidget('ir-right', rightIRStatus, data.IRSensorRight, 'cm');
+        }
+        
+        // Lidar
+        if (data.lidarDistance !== undefined) {
+            const lidarStatus = data.lidarStatus || 'idle';
+            updateWidget('lidar', lidarStatus, data.lidarDistance, 'cm');
+        }
+        
+        // Update Subsystem Widgets
+        
+        // Extender
+        if (data.extenderStatus !== undefined) {
+            updateWidget('extender', data.extenderStatus, data.extenderLength || 0, 'cm');
+        }
+        
+        // Elevator
+        if (data.elevatorPosition !== undefined) {
+            updateWidget('elevator', 'idle', data.elevatorPosition);
+        }
+        
+        // Gripper
+        if (data.gripperStatus !== undefined) {
+            const gripperStatus = data.gripperStatus === 'open' ? 'idle' : 'ok';
+            updateWidget('gripper', gripperStatus, data.gripperStatus);
+        }
+        
+        // Carriage Position
+        if (data.carriagePosition !== undefined) {
+            updateWidget('arm', 'idle', data.carriagePosition);
+        }
+        
+        // Line Follower
+        if (data.lineFollowerSensor !== undefined) {
+            const lineStatus = data.lineFollowerSensor === 'on line' ? 'ok' : 'idle';
+            updateWidget('vision', lineStatus, data.lineFollowerSensor);
+        }
+        
+        // Battery 
+        if (data.batteryVoltage !== undefined) {
+            let batteryStatus = 'ok';
+            if (data.batteryVoltage < 11.5) batteryStatus = 'error';        
+            else if (data.batteryVoltage < 12.0) batteryStatus = 'busy';
+            
+            updateWidget('battery', batteryStatus, data.batteryVoltage.toFixed(1), 'V');
+        }
+        
+        // Robot Mode
+        if (data.robotMode !== undefined) {
+            const modeElement = document.getElementById('robot-mode');
+            if (modeElement) {
+                modeElement.textContent = data.robotMode.toUpperCase();
+                modeElement.className = `mode-indicator ${data.robotMode}`;
+            }
+        }
     }
 
-    async function updateStatus() {
-      try {
-        const resp = await fetch('status.json', {cache: "no-store"});
-        if (!resp.ok) throw new Error('No status file');
-        const data = await resp.json();
-        renderWidgets(hardwareWidgets, "hardware-widgets", data);
-        renderWidgets(subsystemWidgets, "subsystem-widgets", data);
-      } catch (e) {
-        renderWidgets(hardwareWidgets, "hardware-widgets", {});
-        renderWidgets(subsystemWidgets, "subsystem-widgets", {});
-      }
+    function fetchLogs() {
+        fetch('robot.log', {cache: "no-store"})
+            .then(response => response.text())
+            .then(data => {
+                const logContainer = document.getElementById('robot-log');
+                if (logContainer) {
+                    // Convert ANSI color codes to HTML
+                    const htmlContent = convertAnsiToHtml(data);
+                    logContainer.innerHTML = htmlContent;
+                    
+                    // Auto-scroll to bottom
+                    const wasAtBottom = logContainer.scrollHeight - logContainer.scrollTop <= logContainer.clientHeight + 5;
+                    if (wasAtBottom) {
+                        logContainer.scrollTop = logContainer.scrollHeight;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching logs:', error);
+                document.getElementById('robot-log').textContent = "Unable to fetch log";
+            });
     }
 
-    updateLog();
-    updateStatus();
-    setInterval(updateLog, 1000);
-    setInterval(updateStatus, 1000);
+    function convertAnsiToHtml(text) {
+        // Simple ANSI to HTML conversion
+        return text
+            .replace(/\[31m/g, '<span class="log-error">')      // Red
+            .replace(/\[32m/g, '<span class="log-success">')    // Green  
+            .replace(/\[33m/g, '<span class="log-warning">')    // Yellow
+            .replace(/\[34m/g, '<span class="log-info">')       // Blue
+            .replace(/\[35m/g, '<span class="log-debug">')      // Magenta
+            .replace(/\[36m/g, '<span class="log-thread">')     // Cyan
+            .replace(/\[0m/g, '</span>')                        // Reset
+            .replace(/\n/g, '<br>');
+    }
+
+    // Start fetching data when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // Start data fetching
+        fetchRobotData();
+        fetchLogs();
+        
+        // Set up periodic updates
+        setInterval(fetchRobotData, 1000);  // Update data every second
+        setInterval(fetchLogs, 2000);       // Update logs every 2 seconds
+    });
+
+    // Handle page visibility changes
+    document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+            // Page became visible, resume fetching
+            fetchRobotData();
+        }
+    });
   </script>
 </body>
 </html>
