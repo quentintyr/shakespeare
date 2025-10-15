@@ -5,7 +5,7 @@
 #include <mutex>
 
 
-ModeInfo last_mode = {LOG_RESET, "[INIT]"};
+ModeInfo last_mode = {LOG_GREEN, "[INIT]"};
 std::ofstream logFile;
 std::mutex log_mutex;
 

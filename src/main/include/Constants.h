@@ -13,9 +13,9 @@
 namespace Constants
 {
         // logfile path
-        inline constexpr const char *FILE_PATH = "/home/lvuser/deploy/robot.log";
+        inline constexpr const char* FILE_PATH = "/home/lvuser/deploy/robot.log";
         // widget logfile - matches what the website expects
-        inline constexpr const char *WIDGET_FILE_PATH = "/home/lvuser/deploy/status.json";
+        inline constexpr const char* WIDGET_FILE_PATH = "/home/lvuser/deploy/status.json";
         // amcu constants
         inline constexpr int kWheelRadius = 50;
         inline constexpr int kRobotRadius = 150;
