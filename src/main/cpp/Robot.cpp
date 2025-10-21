@@ -11,24 +11,26 @@
 #include "utilities/MiniHttpServer.h"
 
 
-UltraSonicSubsystem sonic;
-ExtenderSubsystem extender;
+#include "subsystems/ElevatorSubsystem.h"
+#include "utilities/WidgetSystem.h"
+#include "utilities/ShuffleboardData.h"
+#include <networktables/NetworkTableInstance.h>
+#include <frc/RobotController.h>
+#include <frc/DriverStation.h>
 
+UltraSonicSubsystem sonic;
 
 void Robot::RobotInit() {
   SetupLogging();
   LOG_INFO("Initializing Robot...");
-  try
-  {
-    sonic.UltraSonicStartThread();
-    StartMiniHttpServer(8080);
-  }
-  catch(const std::exception& e)
-  {
-    std::cerr << e.what() << '\n';
-  }
-  
-  
+  sonic.UltraSonicStartThread();
+  // ElevatorUpDown::ElevatorSubsystem::init(&amcu);   
+  // ElevatorUpDown::ElevatorSubsystem::calibrate();
+
+  auto table1 = nt::NetworkTableInstance::GetDefault().GetTable("Dashboard");
+  table1->PutString("RobotMode", "init");
+  table1->PutBoolean("Connected", true);
+
   }
   
 
@@ -42,17 +44,55 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() { 
   frc2::CommandScheduler::GetInstance().Run();
-  extender.ExtenderSubsystemCurrentState();
 
+  auto table = nt::NetworkTableInstance::GetDefault().GetTable("Dashboard");
+  // Battery data
+  double batteryVoltage = frc::RobotController::GetInputVoltage();
+  table->PutNumber("Battery", batteryVoltage);
+  
+  // Ultrasonic sensors
+  table->PutNumber("USSensorLeft", sonic.getSonicLeftDistance());
+  table->PutNumber("USSensorRight", sonic.getSonicRightDistance());
+  auto mode = GetRobotMode();
+  table->PutString("RobotMode", mode);
+  
+  // Placeholder sensor data (replace with real sensors when available)
+  table->PutNumber("IRSensorLeft", 0);
+  table->PutNumber("IRSensorRight", 0);
+  table->PutNumber("LidarDistance", 0);
+  table->PutString("LidarStatus", "disconnected");
+  table->PutString("ElevatorPosition", "0mm");
+  table->PutString("CarriagePosition", "home");
+  table->PutString("GripperStatus", "open");
+  table->PutString("ExtenderStatus", "idle");
+  table->PutNumber("ExtenderLength", 0);
+  table->PutString("LineFollowerSensor", "not on line");
 }
 
-
+std::string Robot::GetRobotMode() {
+    // Use correct FRC 2020 API method names
+    auto& ds = frc::DriverStation::GetInstance();
+    
+    if (ds.IsDisabled()) {
+        return "disabled";
+    } else if (ds.IsAutonomous()) {
+        return "autonomous";
+    } else if (ds.IsOperatorControl()) {
+        return "teleop";
+    } else if (ds.IsTest()) {
+        return "test";
+    } else {
+        return "unknown";
+    }
+}
 /**
  * This function is called once each time the robot enters Disabled mode. You
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() {}
+void Robot::DisabledInit() {
+  LOG_DISABLED(" Disabled.");
+}
 
 void Robot::DisabledPeriodic() {}
 
@@ -61,7 +101,8 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-
+  last_mode = {LOG_PURPLE, "[AUTONOMOUS]"};
+  LOG_AUTONOMOUS("Enabled");
 
 }
 
@@ -76,6 +117,8 @@ void Robot::TeleopInit() {
   // teleop starts running. If you want the autonomous to
   // continue until interrupted by another command, remove
   // this line or comment it out.
+  last_mode = {LOG_CYAN, "[TELEOP]"};
+  LOG_TELEOP("Enabled.");
 
 }
 

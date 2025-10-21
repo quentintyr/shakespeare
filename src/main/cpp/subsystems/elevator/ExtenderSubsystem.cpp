@@ -1,5 +1,5 @@
 #include "subsystems/ExtenderSubsystem.h"
-#include "utilities/LoggingSystem.h"
+#include "web-ds-logger/src/LoggingSystem.h"
 #include "Constants.h"
 
 #include "studica/Servo.h"

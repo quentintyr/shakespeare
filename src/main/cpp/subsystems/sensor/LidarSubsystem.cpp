@@ -1,5 +1,5 @@
 #include "subsystems/LidarSubsystem.h"
-#include "utilities/LoggingSystem.h"
+#include "web-ds-logger/src/LoggingSystem.h"
 #include "studica/Cobra.h"
 
 #include <sstream>  
@@ -19,17 +19,24 @@ LidarSubsystem::LidarSubsystem() {
     LOG_INFO(logMsg);
 }
 
-double LidarSubsystem::getDistance() {
-    studica::Lidar::ScanData data = lidar.GetData();
-    return data.distance[180] / 10.0;  // Convert mm to cm
+LidarSubsystem::~LidarSubsystem() {
+
 }
 
-double LidarSubsystem::getAngle() {
-    studica::Lidar::ScanData data = lidar.GetData();
-    return data.angle[180];
+void LidarSubsystem::LidarStartThread() {
+
 }
 
-// double LidarSubsystem::getMedianOffAngle() {
-//     studica::Lidar::ScanData data = lidar.GetData();
-//     return data.distance[170] / 10.0;  // Example: distance at 170 degrees
-// }
+void LidarSubsystem::LidarWorker() {
+
+}
+/**
+ * Available Angles: 0 - 360 deg
+*/
+double LidarSubsystem::getMedianDistanceOfAngle(int angle) {
+    studica::Lidar::ScanData data = lidar.GetData();
+    return data.angle[angle];
+}
+
+
+
