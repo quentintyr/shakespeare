@@ -1,0 +1,3 @@
+[submodule "src/main/deploy/web-ds"]
+	path = src/main/deploy/web-ds
+	url = https://github.com/quentintyr/web-ds.git
