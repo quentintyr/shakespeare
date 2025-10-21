@@ -47,7 +47,10 @@ struct ModeInfo
 extern ModeInfo last_mode;
 extern std::mutex log_mutex;
 
-void SetupLogging(); 
+void SetupLogging();
+void UpdateLogging();
+void InitLogging();
+std::string GetRobotMode();
 
 inline std::string current_time()
 {
