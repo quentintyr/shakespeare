@@ -61,7 +61,7 @@ model {
 
             sources.cpp {
                 source {
-                    srcDir 'src/main/cpp'
+                    srcDirs 'src/main/cpp', 'src/main/deploy/web-ds-logger/src'
                     include '**/*.cpp', '**/*.cc'
                 }
                 exportedHeaders {
