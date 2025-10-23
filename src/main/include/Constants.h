@@ -8,7 +8,7 @@
 #pragma once
 
 #include "studica/Servo.h"
-#include "subsystems/AMCU.h"
+#include "subsystems/amcu/AMCU.h"
 
 namespace Constants
 {

@@ -1,4 +1,4 @@
-#include "subsystems/LidarSubsystem.h"
+#include "subsystems/sensor/LidarSubsystem.h"
 #include "web-ds-logger/src/LoggingSystem.h"
 #include "studica/Cobra.h"
 
