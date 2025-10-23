@@ -1,79 +1,93 @@
 #include "subsystems/Gamepad.h"
+#include <networktables/NetworkTableInstance.h>
 #include <frc/Joystick.h>
+#include <cmath>
 
-// The joystick object for the driver controller
-static frc::Joystick driveJoystick(DRIVE_USB_PORT);
+using namespace frc;
 
-// Axis methods
-double Gamepad::GetRightDriveY(void) {
-    return driveJoystick.GetRawAxis(RIGHT_ANALOG_Y);
+static Joystick drivePad{Gamepad::DRIVE_USB_PORT};
+
+/**
+ * Helper function to apply deadband.
+ */
+static double ApplyDeadband(double value, double deadband = 0.05) {
+    return (std::fabs(value) < deadband) ? 0.0 : value;
 }
 
-double Gamepad::GetRightDriveX(void) {
-    return driveJoystick.GetRawAxis(RIGHT_ANALOG_X);
-}
+// === Joystick Axis Accessors ===
+double Gamepad::GetLeftDriveX()  { return ApplyDeadband(drivePad.GetRawAxis(LEFT_ANALOG_X)); }
+double Gamepad::GetLeftDriveY()  { return ApplyDeadband(drivePad.GetRawAxis(LEFT_ANALOG_Y)); }
 
-double Gamepad::GetLeftDriveY(void) {
-    return driveJoystick.GetRawAxis(LEFT_ANALOG_Y);
-}
+double Gamepad::GetRightDriveX() { return ApplyDeadband(drivePad.GetRawAxis(RIGHT_ANALOG_X)); }
+double Gamepad::GetRightDriveY() { return ApplyDeadband(drivePad.GetRawAxis(RIGHT_ANALOG_Y)); }
 
-double Gamepad::GetLeftDriveX(void) {
-    return driveJoystick.GetRawAxis(LEFT_ANALOG_X);
-}
+// === Trigger Accessors ===
+double Gamepad::GetLeftTrigger()  { return drivePad.GetRawAxis(LEFT_TRIGGER_A); }
+double Gamepad::GetRightTrigger() { return drivePad.GetRawAxis(RIGHT_TRIGGER_A); }
 
-// Button methods
-bool Gamepad::GetDriveRightTrigger(void) {
-    return driveJoystick.GetRawButton(RIGHT_TRIGGER);
-}
+// === Button Accessors ===
+bool Gamepad::GetDriveLeftBumper()        { return drivePad.GetRawButton(LEFT_BUMPER); }
+bool Gamepad::GetDriveRightBumper()       { return drivePad.GetRawButton(RIGHT_BUMPER); }
+bool Gamepad::GetDriveBack()              { return drivePad.GetRawButton(BACK); }
+bool Gamepad::GetDriveStart()             { return drivePad.GetRawButton(START); }
 
-bool Gamepad::GetDriveRightBumper(void) {
-    return driveJoystick.GetRawButton(RIGHT_BUMPER);
-}
+bool Gamepad::GetDriveAButton()           { return drivePad.GetRawButton(A_BUTTON); }
+bool Gamepad::GetDriveXButton()           { return drivePad.GetRawButton(X_BUTTON); }
+bool Gamepad::GetDriveYButton()           { return drivePad.GetRawButton(Y_BUTTON); }
+bool Gamepad::GetDriveBButton()           { return drivePad.GetRawButton(B_BUTTON); }
 
-bool Gamepad::getDriveLeftTrigger(void) {
-    return driveJoystick.GetRawButton(LEFT_TRIGGER);
-}
+bool Gamepad::GetDriveHomeButton()        { return drivePad.GetRawButton(HOME_BUTTON); }
+bool Gamepad::GetDriveLeftStickPress()    { return drivePad.GetRawButton(LEFT_STICK_PRESS); }
+bool Gamepad::GetDriveRightStickPress()   { return drivePad.GetRawButton(RIGHT_STICK_PRESS); }
 
-bool Gamepad::GetDriveLeftBumper(void) {
-    return driveJoystick.GetRawButton(LEFT_BUMPER);
-}
+bool Gamepad::GetDriveRightAnalogButton() { return drivePad.GetRawButton(RIGHT_ANALOG_BUTTON); }
+bool Gamepad::GetDrivePS4Button()         { return drivePad.GetRawButton(PS4_BUTTON); }
+bool Gamepad::GetDriveTouchpadButton()    { return drivePad.GetRawButton(TOUCHPAD_BUTTON); }
 
-bool Gamepad::GetDriveXButton(void) {
-    return driveJoystick.GetRawButton(X_BUTTON);
-}
 
-bool Gamepad::GetDriveSquareButton(void) {
-    return driveJoystick.GetRawButton(SQUARE_BUTTON);
-}
+// POV for the DPAD
+int Gamepad::GetPOV() { return drivePad.GetPOV(); }
 
-bool Gamepad::GetDriveCircleButton(void) {
-    return driveJoystick.GetRawButton(CIRCLE_BUTTON);
-}
+bool Gamepad::IsDPadUp()    { return GetPOV() == 0; }
+bool Gamepad::IsDPadRight() { return GetPOV() == 90; }
+bool Gamepad::IsDPadDown()  { return GetPOV() == 180; }
+bool Gamepad::IsDPadLeft()  { return GetPOV() == 270; }
 
-bool Gamepad::GetDriveTriangleButton(void) {
-    return driveJoystick.GetRawButton(TRIANGLE_BUTTON);
-}
+// Update the Dashboard 
+void Gamepad::Periodic() {
 
-bool Gamepad::GetDriveOptionsButton(void) {
-    return driveJoystick.GetRawButton(OPTIONS_BUTTON);
-}
+    auto controllerTable = nt::NetworkTableInstance::GetDefault().GetTable("Controller");
 
-bool Gamepad::GetDriveShareButton(void) {
-    return driveJoystick.GetRawButton(SHARE_BUTTON);
-}
+    // Publish primary sticks, triggers, and POV
+    controllerTable->PutNumber("LeftX", GetLeftDriveX());
+    controllerTable->PutNumber("LeftY", GetLeftDriveY());
+    controllerTable->PutNumber("RightX", GetRightDriveX());
+    controllerTable->PutNumber("RightY", GetRightDriveY());
 
-bool Gamepad::GetDriveRightAnalogButton(void) {
-    return driveJoystick.GetRawButton(RIGHT_ANALOG_BUTTON);
-}
+    controllerTable->PutNumber("LeftTrigger", GetLeftTrigger());
+    controllerTable->PutNumber("RightTrigger", GetRightTrigger());
 
-bool Gamepad::GetDriveLeftAnalogButton(void) {
-    return driveJoystick.GetRawButton(LEFT_ANALOG_BUTTON);
-}
+    controllerTable->PutNumber("POV", GetPOV());
 
-bool Gamepad::GetDrivePS4Button(void) {
-    return driveJoystick.GetRawButton(PS4_BUTTON);
-}
+    // Buttons (1..16)
+    controllerTable->PutNumber("A", GetDriveAButton());
+    controllerTable->PutNumber("B", GetDriveBButton());
+    controllerTable->PutNumber("X", GetDriveXButton());
+    controllerTable->PutNumber("Y", GetDriveYButton());
 
-bool Gamepad::GetDriveTouchpadButton(void) {
-    return driveJoystick.GetRawButton(TOUCHPAD_BUTTON);
+    controllerTable->PutNumber("Left Bumper", GetDriveLeftBumper());
+    controllerTable->PutNumber("Right Bumper", GetDriveRightBumper());
+
+    controllerTable->PutNumber("Back", GetDriveBack());
+    controllerTable->PutNumber("Start", GetDriveStart());
+
+    controllerTable->PutNumber("Left Stick Press", GetDriveLeftStickPress());
+    controllerTable->PutNumber("Right Stick Press", GetDriveRightStickPress());
+
+    controllerTable->PutNumber("Home", GetDriveHomeButton());
+    controllerTable->PutNumber("RightAnalog", GetDriveRightAnalogButton());
+
+    controllerTable->PutNumber("PS4", GetDrivePS4Button());
+    controllerTable->PutNumber("Touchpad", GetDriveTouchpadButton());
+
 }
