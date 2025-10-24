@@ -36,13 +36,8 @@ bool Gamepad::GetDriveXButton()           { return drivePad.GetRawButton(X_BUTTO
 bool Gamepad::GetDriveYButton()           { return drivePad.GetRawButton(Y_BUTTON); }
 bool Gamepad::GetDriveBButton()           { return drivePad.GetRawButton(B_BUTTON); }
 
-bool Gamepad::GetDriveHomeButton()        { return drivePad.GetRawButton(HOME_BUTTON); }
 bool Gamepad::GetDriveLeftStickPress()    { return drivePad.GetRawButton(LEFT_STICK_PRESS); }
 bool Gamepad::GetDriveRightStickPress()   { return drivePad.GetRawButton(RIGHT_STICK_PRESS); }
-
-bool Gamepad::GetDriveRightAnalogButton() { return drivePad.GetRawButton(RIGHT_ANALOG_BUTTON); }
-bool Gamepad::GetDrivePS4Button()         { return drivePad.GetRawButton(PS4_BUTTON); }
-bool Gamepad::GetDriveTouchpadButton()    { return drivePad.GetRawButton(TOUCHPAD_BUTTON); }
 
 
 // POV for the DPAD
@@ -52,6 +47,9 @@ bool Gamepad::IsDPadUp()    { return GetPOV() == 0; }
 bool Gamepad::IsDPadRight() { return GetPOV() == 90; }
 bool Gamepad::IsDPadDown()  { return GetPOV() == 180; }
 bool Gamepad::IsDPadLeft()  { return GetPOV() == 270; }
+
+bool Gamepad::test1()    { return drivePad.GetRawButton(TEST1); }
+bool Gamepad::test2()   { return drivePad.GetRawButton(TEST2); }
 
 // Update the Dashboard 
 void Gamepad::Periodic() {
@@ -84,10 +82,8 @@ void Gamepad::Periodic() {
     controllerTable->PutNumber("Left Stick Press", GetDriveLeftStickPress());
     controllerTable->PutNumber("Right Stick Press", GetDriveRightStickPress());
 
-    controllerTable->PutNumber("Home", GetDriveHomeButton());
-    controllerTable->PutNumber("RightAnalog", GetDriveRightAnalogButton());
+    controllerTable->PutNumber("test1", test1());
+    controllerTable->PutNumber("test2", test2());
 
-    controllerTable->PutNumber("PS4", GetDrivePS4Button());
-    controllerTable->PutNumber("Touchpad", GetDriveTouchpadButton());
 
 }

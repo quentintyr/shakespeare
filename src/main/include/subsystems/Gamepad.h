@@ -24,13 +24,8 @@ public:
     bool GetDriveYButton(void);           // Y (button 4)
     bool GetDriveBButton(void);           // B (button 2)
 
-    bool GetDriveHomeButton(void);        // Home (button 11)
     bool GetDriveLeftStickPress(void);    // Left stick press (button 9)
     bool GetDriveRightStickPress(void);   // Right stick press (button 10)
-
-    bool GetDriveRightAnalogButton(void); // Not used on this controller
-    bool GetDrivePS4Button(void);         // Not used on this controller
-    bool GetDriveTouchpadButton(void);    // Not used on this controller
 
     // D-pad / POV
     int GetPOV(void);                     // returns -1 or angle in degrees
@@ -38,6 +33,9 @@ public:
     bool IsDPadRight(void);
     bool IsDPadDown(void);
     bool IsDPadLeft(void);
+
+    bool test1(void);
+    bool test2(void);
 
     void Periodic() override;
 
@@ -66,10 +64,6 @@ private:
     static constexpr int START               = 8;
     static constexpr int LEFT_STICK_PRESS    = 9;
     static constexpr int RIGHT_STICK_PRESS   = 10;
-    static constexpr int HOME_BUTTON         = 11;
-
-    // unused
-    static constexpr int RIGHT_ANALOG_BUTTON = 12;
-    static constexpr int PS4_BUTTON          = 13;
-    static constexpr int TOUCHPAD_BUTTON     = 14;
+    static constexpr int TEST1               = 11;
+    static constexpr int TEST2               = 12;
 };
