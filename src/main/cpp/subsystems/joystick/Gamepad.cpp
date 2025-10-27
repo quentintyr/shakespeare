@@ -15,34 +15,29 @@ static double ApplyDeadband(double value, double deadband = 0.05) {
 }
 
 // === Joystick Axis Accessors ===
-double Gamepad::GetLeftDriveX()  { return ApplyDeadband(drivePad.GetRawAxis(LEFT_ANALOG_X)); }
-double Gamepad::GetLeftDriveY()  { return ApplyDeadband(drivePad.GetRawAxis(LEFT_ANALOG_Y)); }
+double Gamepad::GetLeftStickX()  { return ApplyDeadband(drivePad.GetRawAxis(LEFT_ANALOG_X)); }
+double Gamepad::GetLeftStickY()  { return ApplyDeadband(drivePad.GetRawAxis(LEFT_ANALOG_Y)); }
 
-double Gamepad::GetRightDriveX() { return ApplyDeadband(drivePad.GetRawAxis(RIGHT_ANALOG_X)); }
-double Gamepad::GetRightDriveY() { return ApplyDeadband(drivePad.GetRawAxis(RIGHT_ANALOG_Y)); }
+double Gamepad::GetRightStickY() { return ApplyDeadband(drivePad.GetRawAxis(RIGHT_ANALOG_Y)); }
+double Gamepad::GetRightStickX()  { return drivePad.GetRawAxis(RIGHT_ANALOG_X); }
 
-// === Trigger Accessors ===
-double Gamepad::GetLeftTrigger()  { return drivePad.GetRawAxis(LEFT_TRIGGER_A); }
-double Gamepad::GetRightTrigger() { return drivePad.GetRawAxis(RIGHT_TRIGGER_A); }
 
 // === Button Accessors ===
-bool Gamepad::GetDriveLeftBumper()        { return drivePad.GetRawButton(LEFT_BUMPER); }
-bool Gamepad::GetDriveRightBumper()       { return drivePad.GetRawButton(RIGHT_BUMPER); }
-bool Gamepad::GetDriveBack()              { return drivePad.GetRawButton(BACK); }
-bool Gamepad::GetDriveStart()             { return drivePad.GetRawButton(START); }
+bool Gamepad::GetLeftBumper()        { return drivePad.GetRawButton(LEFT_BUMPER); }
+bool Gamepad::GetRightBumper()       { return drivePad.GetRawButton(RIGHT_BUMPER); }
+bool Gamepad::GetLeftTrigger()              { return drivePad.GetRawButton(LEFT_TRIGGER); }
+bool Gamepad::GetRightTrigger()             { return drivePad.GetRawButton(RIGHT_TRIGGER); }
 
-bool Gamepad::GetDriveAButton()           { return drivePad.GetRawButton(A_BUTTON); }
-bool Gamepad::GetDriveXButton()           { return drivePad.GetRawButton(X_BUTTON); }
-bool Gamepad::GetDriveYButton()           { return drivePad.GetRawButton(Y_BUTTON); }
-bool Gamepad::GetDriveBButton()           { return drivePad.GetRawButton(B_BUTTON); }
+bool Gamepad::GetAButton()           { return drivePad.GetRawButton(A_BUTTON); }
+bool Gamepad::GetXButton()           { return drivePad.GetRawButton(X_BUTTON); }
+bool Gamepad::GetYButton()           { return drivePad.GetRawButton(Y_BUTTON); }
+bool Gamepad::GetBButton()           { return drivePad.GetRawButton(B_BUTTON); }
 
-bool Gamepad::GetDriveHomeButton()        { return drivePad.GetRawButton(HOME_BUTTON); }
-bool Gamepad::GetDriveLeftStickPress()    { return drivePad.GetRawButton(LEFT_STICK_PRESS); }
-bool Gamepad::GetDriveRightStickPress()   { return drivePad.GetRawButton(RIGHT_STICK_PRESS); }
+bool Gamepad::GetStickLeftButton()        { return drivePad.GetRawButton(LEFT_STICK_BUTTON); }
+bool Gamepad::GetStickRightButton()       { return drivePad.GetRawButton(RIGHT_STICK_BUTTON); }
 
-bool Gamepad::GetDriveRightAnalogButton() { return drivePad.GetRawButton(RIGHT_ANALOG_BUTTON); }
-bool Gamepad::GetDrivePS4Button()         { return drivePad.GetRawButton(PS4_BUTTON); }
-bool Gamepad::GetDriveTouchpadButton()    { return drivePad.GetRawButton(TOUCHPAD_BUTTON); }
+bool Gamepad::GetBackButton()        { return drivePad.GetRawButton(BACK_BUTTON); }
+bool Gamepad::GetStartButton()       { return drivePad.GetRawButton(START_BUTTON); }
 
 
 // POV for the DPAD
@@ -59,35 +54,30 @@ void Gamepad::Periodic() {
     auto controllerTable = nt::NetworkTableInstance::GetDefault().GetTable("Controller");
 
     // Publish primary sticks, triggers, and POV
-    controllerTable->PutNumber("LeftX", GetLeftDriveX());
-    controllerTable->PutNumber("LeftY", GetLeftDriveY());
-    controllerTable->PutNumber("RightX", GetRightDriveX());
-    controllerTable->PutNumber("RightY", GetRightDriveY());
+    controllerTable->PutNumber("LeftX", GetLeftStickX());
+    controllerTable->PutNumber("LeftY", GetLeftStickY());
 
-    controllerTable->PutNumber("LeftTrigger", GetLeftTrigger());
-    controllerTable->PutNumber("RightTrigger", GetRightTrigger());
+    controllerTable->PutNumber("RightY", GetRightStickY());
+    controllerTable->PutNumber("RightX", GetRightStickX());
 
-    controllerTable->PutNumber("POV", GetPOV());
+    controllerTable->PutNumber("DPAD POV", GetPOV());
 
     // Buttons (1..16)
-    controllerTable->PutNumber("A", GetDriveAButton());
-    controllerTable->PutNumber("B", GetDriveBButton());
-    controllerTable->PutNumber("X", GetDriveXButton());
-    controllerTable->PutNumber("Y", GetDriveYButton());
+    controllerTable->PutNumber("A", GetAButton());
+    controllerTable->PutNumber("B", GetBButton());
+    controllerTable->PutNumber("X", GetXButton());
+    controllerTable->PutNumber("Y", GetYButton());
 
-    controllerTable->PutNumber("Left Bumper", GetDriveLeftBumper());
-    controllerTable->PutNumber("Right Bumper", GetDriveRightBumper());
+    controllerTable->PutNumber("Left Bumper", GetLeftBumper());
+    controllerTable->PutNumber("Right Bumper", GetRightBumper());
 
-    controllerTable->PutNumber("Back", GetDriveBack());
-    controllerTable->PutNumber("Start", GetDriveStart());
+    controllerTable->PutNumber("Left Trigger", GetLeftTrigger());
+    controllerTable->PutNumber("Right Trigger", GetRightTrigger());
 
-    controllerTable->PutNumber("Left Stick Press", GetDriveLeftStickPress());
-    controllerTable->PutNumber("Right Stick Press", GetDriveRightStickPress());
+    controllerTable->PutNumber("Left Stick Button", GetStickLeftButton());
+    controllerTable->PutNumber("Right Stick Button", GetStickRightButton());
 
-    controllerTable->PutNumber("Home", GetDriveHomeButton());
-    controllerTable->PutNumber("RightAnalog", GetDriveRightAnalogButton());
-
-    controllerTable->PutNumber("PS4", GetDrivePS4Button());
-    controllerTable->PutNumber("Touchpad", GetDriveTouchpadButton());
+    controllerTable->PutNumber("Back Button", GetBackButton());
+    controllerTable->PutNumber("Start Button", GetStartButton());
 
 }
