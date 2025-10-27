@@ -17,6 +17,8 @@ public:
 private:
     void UltraSonicWorker();
     double getMedian(std::vector<double> &values);
+    double leftValue;
+    double rightValue;
 
     frc::Ultrasonic *sideRight;
     frc::Ultrasonic *sideLeft;

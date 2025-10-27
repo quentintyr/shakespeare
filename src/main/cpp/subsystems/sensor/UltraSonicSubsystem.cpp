@@ -30,8 +30,8 @@ double UltraSonicSubsystem::getMedian(std::vector<double> &values)
 
 void UltraSonicSubsystem::UltraSonicWorker()
 {
-    sideRight = new frc::Ultrasonic(Constants::RIGHT_TRIG_PORT, Constants::RIGHT_ECHO_PORT);
-    sideLeft = new frc::Ultrasonic(Constants::LEFT_TRIG_PORT, Constants::LEFT_ECHO_PORT);
+    sideRight = new frc::Ultrasonic(Constants::Ultrasonic::RIGHT_TRIG_PORT, Constants::Ultrasonic::RIGHT_ECHO_PORT);
+    sideLeft = new frc::Ultrasonic(Constants::Ultrasonic::LEFT_TRIG_PORT, Constants::Ultrasonic::LEFT_ECHO_PORT);
     sideRight->SetAutomaticMode(true);
     sideLeft->SetAutomaticMode(true);
 
@@ -39,32 +39,32 @@ void UltraSonicSubsystem::UltraSonicWorker()
     {
         if (sideLeftValueList.size() >= 9)
         {
-            double leftValue = getMedian(sideLeftValueList);
+            leftValue = getMedian(sideLeftValueList);
             sideLeftValueList.erase(sideLeftValueList.begin());
         }
         if (sideRightValueList.size() >= 9)
         {
-            double rightValue = getMedian(sideRightValueList);
+            rightValue = getMedian(sideRightValueList);
             sideRightValueList.erase(sideRightValueList.begin());
         }
         sideLeftValueList.push_back(sideLeft->GetRangeMM());
         sideRightValueList.push_back(sideRight->GetRangeMM());
-        std::this_thread::sleep_for(std::chrono::milliseconds(Constants::SENSOR_UPDATE_RATE));
+        std::this_thread::sleep_for(std::chrono::milliseconds(Constants::Ultrasonic::SENSOR_UPDATE_RATE));
     }
 }
 
 void UltraSonicSubsystem::UltraSonicStartThread()
 {
-    LOG_THREAD("Sensors initialized.");
+    LOG_THREAD("Ultra Sonic Sensors initialized.");
     workerThread = std::thread(&UltraSonicSubsystem::UltraSonicWorker, this);
 }
 
 double UltraSonicSubsystem::getSonicRightDistance()
 {
-    return getMedian(sideRightValueList);
+    return leftValue;
 }
 
 double UltraSonicSubsystem::getSonicLeftDistance()
 {
-    return getMedian(sideLeftValueList);
+    return rightValue;
 }
