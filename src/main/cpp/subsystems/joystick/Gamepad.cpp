@@ -1,4 +1,4 @@
-#include "subsystems/Gamepad.h"
+#include "subsystems/joystick/Gamepad.h"
 #include <networktables/NetworkTableInstance.h>
 #include <frc/Joystick.h>
 #include <cmath>

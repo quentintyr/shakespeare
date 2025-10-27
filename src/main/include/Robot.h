@@ -11,7 +11,6 @@
 #include <frc2/command/Command.h>
 
 #include "RobotContainer.h"
-#include "subsystems/Gamepad.h"
 
 class Robot : public frc::TimedRobot
 {
@@ -27,16 +26,10 @@ public:
   void TeleopPeriodic() override;
   void TestInit() override;
   void TestPeriodic() override;
-  std::string GetRobotMode();
 
 private:
   // Have it null by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.
 
   RobotContainer m_container;
-
-  // Gamepad methods
-  void OnButtonPressed(int button);
-  void OnButtonReleased(int button);
-  void HandleGamepadInput();
 };

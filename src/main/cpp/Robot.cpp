@@ -9,7 +9,7 @@
 #include "web-ds-logger/src/LoggingSystem.h"
 #include "subsystems/sensor/UltraSonicSubsystem.h"
 #include "subsystems/elevator/ElevatorSubsystem.h"
-#include "subsystems/Gamepad.h"
+#include "subsystems/joystick/Gamepad.h"
 
 #include <networktables/NetworkTableInstance.h>
 #include <frc/RobotController.h>

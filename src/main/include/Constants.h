@@ -10,43 +10,67 @@
 #include "studica/Servo.h"
 #include "subsystems/amcu/AMCU.h"
 
+
 namespace Constants
 {
+class Base{
+public:
         // amcu constants
-        inline constexpr int kWheelRadius = 50;
-        inline constexpr int kRobotRadius = 150;
+        static constexpr int kWheelRadius = 50;
+        static constexpr int kRobotRadius = 150;
 
-        inline constexpr Motor kMotorLeft = MOTOR_0;
-        inline constexpr Motor kMotorRight = MOTOR_2;
-        inline constexpr Motor kMotorBack = MOTOR_3;
-        inline constexpr Motor kMotorElevator = MOTOR_1;
+        static constexpr Motor kMotorLeft = MOTOR_0;
+        static constexpr Motor kMotorRight = MOTOR_2;
+        static constexpr Motor kMotorBack = MOTOR_3;
+        static constexpr Motor kMotorElevator = MOTOR_1;
+};
 
+class Ultrasonic{
+public:
         // ultra sonic right
-        inline constexpr int RIGHT_TRIG_PORT = 2;
-        inline constexpr int RIGHT_ECHO_PORT = 3;
+        static constexpr int RIGHT_TRIG_PORT = 2;
+        static constexpr int RIGHT_ECHO_PORT = 3;
         // ultra sonic left
-        inline constexpr int LEFT_TRIG_PORT = 0;
-        inline constexpr int LEFT_ECHO_PORT = 1;
+        static constexpr int LEFT_TRIG_PORT = 0;
+        static constexpr int LEFT_ECHO_PORT = 1;
 
         // sensor update rate
-        inline constexpr int SENSOR_UPDATE_RATE = 25;
+        static constexpr int SENSOR_UPDATE_RATE = 25;
+};
 
-        // elevator
-        inline constexpr int GRIPPER_TILT_PORT = 10;
-        inline constexpr int GRIPPER_OPEN_PORT = 11;
+class Gripper{
+public:
+        static constexpr int GRIPPER_TILT_PORT = 10;
+        static constexpr int GRIPPER_OPEN_PORT = 11;
+};
 
-        inline constexpr int ELEVATOR_MOVE_PORT = 12;
-        inline constexpr int ELEVEVATOR_UPDOWN_PORT = 13;
-        inline constexpr int ELEVATOR_ROTATE_PORT = 14;
+class Elevator{
+public:
+        static constexpr int ELEVATOR_MOVE_PORT = 12;
+        static constexpr int ELEVEVATOR_UPDOWN_PORT = 13;
+        static constexpr int ELEVATOR_ROTATE_PORT = 14;
+};
 
-        // extender
-        inline constexpr int EXTENDER_SERVO_PORT = 18;
+class Extender{
+public:
+        static constexpr int SERVO_PORT = 18;
 
-        inline constexpr int LIMIT_SWITCH_STOP_BACK_PORT = 11;
-        inline constexpr int LIMIT_SWITCH_STOP_FRONT_PORT = 10;
+        static constexpr int LIMIT_SWITCH_STOP_BACK_PORT = 11;
+        static constexpr int LIMIT_SWITCH_STOP_FRONT_PORT = 10;
 
-        inline constexpr double EXTENDER_DRIVE_FORWARD = 0.0;
-        inline constexpr double EXTENDER_DRIVE_BACKWARD = 1.0;
-        inline constexpr double EXTENDER_DRIVE_STOP = 0.5;
+        static constexpr double DRIVE_FORWARD = 0.0;
+        static constexpr double DRIVE_BACKWARD = 1.0;
+        static constexpr double DRIVE_STOP = 0.5;
+};
+
+
+class IRSensors{
+public:
+        static constexpr int LEFT   = 1;
+        static constexpr int RIGHT  = 0;
+        static constexpr int MAX_RANGE = 10;
+};
 
 }
+
+

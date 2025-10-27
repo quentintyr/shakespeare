@@ -9,9 +9,9 @@
 #include <frc/Timer.h>
 
 
-studica::Servo ExtenderServo{Constants::EXTENDER_SERVO_PORT};
-frc::DigitalInput LimitSwitchStopBack(Constants::LIMIT_SWITCH_STOP_BACK_PORT); // Lower
-frc::DigitalInput LimitSwitchStopFront(Constants::LIMIT_SWITCH_STOP_FRONT_PORT); // Upper
+studica::Servo ExtenderServo{Constants::Extender::SERVO_PORT};
+frc::DigitalInput LimitSwitchStopBack(Constants::Extender::LIMIT_SWITCH_STOP_BACK_PORT); // Lower
+frc::DigitalInput LimitSwitchStopFront(Constants::Extender::LIMIT_SWITCH_STOP_FRONT_PORT); // Upper
 frc::Timer ExtenderTimer;
 
 bool ExtenderInitialized = false;
@@ -27,7 +27,7 @@ void ExtenderSubsystem::ExtenderSubsystemCurrentState() {
             // drive forward once to initialize extender and get time
             if(!ExtenderInitialized) {
                 LOG_INFO("Extender is Idle");
-                ExtenderServo.Set(Constants::EXTENDER_DRIVE_FORWARD);
+                ExtenderServo.Set(Constants::Extender::DRIVE_FORWARD);
                 ExtenderInitialized = true;
                 currentState = ExtenderState::MovingForward;
             }
@@ -39,7 +39,7 @@ void ExtenderSubsystem::ExtenderSubsystemCurrentState() {
             break;
 
         case ExtenderState::AtFront:
-            ExtenderServo.Set(Constants::EXTENDER_DRIVE_BACKWARD);
+            ExtenderServo.Set(Constants::Extender::DRIVE_BACKWARD);
             currentState = ExtenderState::MovingBackward;
             break;
 
@@ -50,7 +50,7 @@ void ExtenderSubsystem::ExtenderSubsystemCurrentState() {
         case ExtenderState::MovingForward:
             if(LimitSwitchStopFront.Get()) {
                 LOG_INFO("LimitSwitch Front pressed.");
-                ExtenderServo.Set(Constants::EXTENDER_DRIVE_STOP);
+                ExtenderServo.Set(Constants::Extender::DRIVE_STOP);
                 ExtenderTimer.Start();
                 LOG_INFO("Timer started");
                 currentState = ExtenderState::AtFront;
@@ -60,7 +60,7 @@ void ExtenderSubsystem::ExtenderSubsystemCurrentState() {
         case ExtenderState::MovingBackward:
             if(LimitSwitchStopBack.Get()) {
                 LOG_INFO("LimitSwitch Back pressed.");
-                ExtenderServo.Set(Constants::EXTENDER_DRIVE_STOP);
+                ExtenderServo.Set(Constants::Extender::DRIVE_STOP);
                 ExtenderTimer.Stop();
                 ExtenderSubsystem::MaxTimeFrontToBack = ExtenderTimer.Get();
                 LOG_INFO("Timer Stopped");
