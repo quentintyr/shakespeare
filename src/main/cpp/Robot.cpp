@@ -7,22 +7,22 @@
 
 #include "Robot.h"
 #include "web-ds-logger/src/LoggingSystem.h"
-#include "subsystems/sensor/UltraSonicSubsystem.h"
 #include "subsystems/elevator/ElevatorSubsystem.h"
 #include "subsystems/joystick/Gamepad.h"
+#include "subsystems/sensor/SensorManager.h"
 
 #include <networktables/NetworkTableInstance.h>
 #include <frc/RobotController.h>
 #include <frc/DriverStation.h>
 
-UltraSonicSubsystem sonic;
 Gamepad gamepad;
+// SensorManager sensormanager;
 
 void Robot::RobotInit() {
   InitLogging();
   SetupLogging();
   LOG_INFO("Initializing Robot...");
-  sonic.UltraSonicStartThread();
+  // sensormanager.SensorManagerStartThread();
   // ElevatorUpDown::ElevatorSubsystem::init(&amcu);   
   // ElevatorUpDown::ElevatorSubsystem::calibrate();
   

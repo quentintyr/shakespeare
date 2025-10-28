@@ -1,36 +1,36 @@
-#include "subsystems/sensor/LineFollowerSubsystem.h"
-#include <iostream>
-#include <frc/smartdashboard/SmartDashboard.h>
+// #include "subsystems/sensor/LineFollowerSubsystem.h"
+// #include <iostream>
+// #include <frc/smartdashboard/SmartDashboard.h>
 
-LineFollower::LineFollower(float voltage) : cobra{voltage} {}
+// LineFollower::LineFollower(float voltage) : cobra{voltage} {}
 
-void LineFollower::InitLineFollower() {
-    update();
-    frc::SmartDashboard::PutString("Cobra volt:", std::to_string(sensorVoltage));
-    std::cout<<"Cobra Voltage" << sensorVoltage << std::endl;
-}
+// void LineFollower::InitLineFollower() {
+//     update();
+//     frc::SmartDashboard::PutString("Cobra volt:", std::to_string(sensorVoltage));
+//     std::cout<<"Cobra Voltage" << sensorVoltage << std::endl;
+// }
 
-void LineFollower::update() {
-    sensorVoltage = cobra.GetVoltage(sensorChannel);
-    std::cout<<"Cobra Voltage" << sensorVoltage << std::endl;
-}
+// void LineFollower::update() {
+//     sensorVoltage = cobra.GetVoltage(sensorChannel);
+//     std::cout<<"Cobra Voltage" << sensorVoltage << std::endl;
+// }
 
-bool LineFollower::isLineDetected() const {
-    bool test;
-    if (sensorVoltage < LINE_THRESHOLD) {
-        test = true;
-    } else {
-        test = false;
-    }
+// bool LineFollower::isLineDetected() const {
+//     bool test;
+//     if (sensorVoltage < LINE_THRESHOLD) {
+//         test = true;
+//     } else {
+//         test = false;
+//     }
 
-    frc::SmartDashboard::PutString("Linie erkannt", std::to_string(test));
-    return sensorVoltage < LINE_THRESHOLD;
-}
+//     frc::SmartDashboard::PutString("Linie erkannt", std::to_string(test));
+//     return sensorVoltage < LINE_THRESHOLD;
+// }
 
-/*int LineFollower::getRawValue() const {
-    return cobra.GetRawValue(sensorChannel);
-}*/
+// /*int LineFollower::getRawValue() const {
+//     return cobra.GetRawValue(sensorChannel);
+// }*/
 
-float LineFollower::getVoltage() const {
-    return sensorVoltage;
-}
+// float LineFollower::getVoltage() const {
+//     return sensorVoltage;
+// }

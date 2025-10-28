@@ -8,41 +8,59 @@ InfraRedSubsystem::InfraRedSubsystem() {
 }
 
 InfraRedSubsystem::~InfraRedSubsystem(){
-    delete irSideLeft;
-    delete irSideRight;
+    if (irSideLeft != nullptr) {
+        delete irSideLeft;
+        irSideLeft = nullptr;
+    }
+    if (irSideRight != nullptr) {
+        delete irSideRight;
+        irSideRight = nullptr;
+    }
 }
 
 void InfraRedSubsystem::UpdateInfraRed()
 {
-    if (irSideLeft && irSideRight == nullptr) {
-         irSideRight = new frc::AnalogInput(Constants::IRSensors::RIGHT);
-        irSideLeft = new frc::AnalogInput(Constants::IRSensors::LEFT);
+    if (irSideLeft == nullptr && irSideRight == nullptr) {
+        try{
+            irSideRight = new frc::AnalogInput(Constants::IRSensors::RIGHT);
+            irSideLeft = new frc::AnalogInput(Constants::IRSensors::LEFT);
+        }catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
     }
+    if (irSideLeft != nullptr && irSideRight != nullptr) {
+        try
+        {
+            const size_t maxSamples = 9;
+            double vLeft = irSideLeft->GetAverageVoltage();
+            double vRight = irSideRight->GetAverageVoltage();
 
-    const size_t maxSamples = 9;
-    double vLeft = irSideLeft->GetAverageVoltage();
-    double vRight = irSideRight->GetAverageVoltage();
+            // guard against zero or tiny voltages
+            if (vLeft <= 0.0001) {vLeft = 0.0001;}
+            if (vRight <= 0.0001) {vRight = 0.0001;}
 
-    // guard against zero or tiny voltages
-    if (vLeft <= 0.0001) {vLeft = 0.0001;}
-    if (vRight <= 0.0001) {vRight = 0.0001;}
+            double rawLeft  = std::pow(vLeft,  -1.2045) * 27.726;
+            double rawRight = std::pow(vRight, -1.2045) * 27.726 - 1.0;
 
-    double rawLeft  = std::pow(vLeft,  -1.2045) * 27.726;
-    double rawRight = std::pow(vRight, -1.2045) * 27.726 - 1.0;
+            irSideLeftValueList.push_back(rawLeft);
+            irSideRightValueList.push_back(rawRight);
 
-    irSideLeftValueList.push_back(rawLeft);
-    irSideRightValueList.push_back(rawRight);
+            if (irSideLeftValueList.size() > maxSamples)
+                irSideLeftValueList.erase(irSideLeftValueList.begin());
+            if (irSideRightValueList.size() > maxSamples)
+                irSideRightValueList.erase(irSideRightValueList.begin());
 
-    if (irSideLeftValueList.size() > maxSamples)
-        irSideLeftValueList.erase(irSideLeftValueList.begin());
-    if (irSideRightValueList.size() > maxSamples)
-        irSideRightValueList.erase(irSideRightValueList.begin());
-
-    if (!irSideLeftValueList.empty())
-        irLeftValue = getMedian(irSideLeftValueList);
-    if (!irSideRightValueList.empty())
-        irRightValue = getMedian(irSideRightValueList);
-
+            if (!irSideLeftValueList.empty())
+                irLeftValue = getMedian(irSideLeftValueList);
+            if (!irSideRightValueList.empty())
+                irRightValue = getMedian(irSideRightValueList);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
 }
 
 double InfraRedSubsystem::getMedian(std::vector<double> &values)

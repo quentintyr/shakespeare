@@ -1,23 +1,29 @@
-#pragma once
+// #pragma once
 
-#include "studica/Lidar.h"
-#include "Constants.h"
+// #include "studica/Lidar.h"
+// #include "Constants.h"
 
-/**
- * kUSB1 = Top USB 2.0 port of VMX
- * kUSB2 = Bottom USB 2.0 port of VMX
- */
+// #include <memory>
+// #include <mutex>
 
+// /**
+//  * kUSB1 = Top USB 2.0 port of VMX
+//  * kUSB2 = Bottom USB 2.0 port of VMX
+//  */
 
-class LidarSubsystem
-{
-public:
-    LidarSubsystem();
-    ~LidarSubsystem();
-    void LidarStartThread();
-    double getMedianDistanceOfAngle(int angle);
+// class LidarSubsystem
+// {
+// public:
+//     LidarSubsystem();
+//     ~LidarSubsystem();
 
-private:
-    void LidarWorker();
+//     void LidarStartThread();
+//     double getMedianDistanceOfAngle(int angle);
 
-};
+// private:
+//     void LidarWorker();
+//     void EnsureInitialized();
+
+//     std::unique_ptr<studica::Lidar> lidar;
+//     std::mutex initMutex;
+// };

@@ -8,7 +8,6 @@
 #include "Constants.h"
 #include "subsystems/sensor/UltraSonicSubsystem.h"
 #include "subsystems/sensor/InfraRedSubsystem.h"
-#include "subsystems/sensor/LidarSubsystem.h"
 
 
 class SensorManager
@@ -25,6 +24,5 @@ private:
 
     std::unique_ptr<UltraSonicSubsystem> ultraSonic;
     std::unique_ptr<InfraRedSubsystem> infraRed;
-    std::unique_ptr<LidarSubsystem> lidar;
 
 };

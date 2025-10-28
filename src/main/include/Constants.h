@@ -38,6 +38,13 @@ public:
         static constexpr int SENSOR_UPDATE_RATE = 25;
 };
 
+class IRSensors{
+public:
+        static constexpr int LEFT   = 0;
+        static constexpr int RIGHT  = 1;
+        static constexpr int MAX_RANGE = 10;
+};
+
 class Gripper{
 public:
         static constexpr int GRIPPER_TILT_PORT = 10;
@@ -61,14 +68,6 @@ public:
         static constexpr double DRIVE_FORWARD = 0.0;
         static constexpr double DRIVE_BACKWARD = 1.0;
         static constexpr double DRIVE_STOP = 0.5;
-};
-
-
-class IRSensors{
-public:
-        static constexpr int LEFT   = 1;
-        static constexpr int RIGHT  = 0;
-        static constexpr int MAX_RANGE = 10;
 };
 
 }
