@@ -11,13 +11,12 @@ class InfraRedSubsystem
 public:
     InfraRedSubsystem();
     ~InfraRedSubsystem();
-    void InfraRedSubsystemStartThread();
     double GetIRLeftDistance();
     double GetIRRightDistance();
     bool IRDistanceSimilar();
+    void UpdateInfraRed();
 
 private:
-    void IRWorker();
     double getMedian(std::vector<double> &values);
     double irLeftValue;
     double irRightValue;
@@ -26,8 +25,6 @@ private:
     frc::AnalogInput *irSideLeft;
     std::vector<double> irSideLeftValueList;
     std::vector<double> irSideRightValueList;
-    std::thread irWorkerThread;
-    std::atomic<bool> irStopThread;
 };
 
 

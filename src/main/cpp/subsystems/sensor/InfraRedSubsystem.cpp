@@ -5,52 +5,21 @@
 InfraRedSubsystem::InfraRedSubsystem() {
     irSideRight = nullptr;
     irSideLeft = nullptr;
-    irStopThread = false;
 }
 
 InfraRedSubsystem::~InfraRedSubsystem(){
-    irStopThread = true;
-    if (irWorkerThread.joinable())
-        irWorkerThread.join();
     delete irSideLeft;
     delete irSideRight;
 }
 
-double InfraRedSubsystem::getMedian(std::vector<double> &values)
+void InfraRedSubsystem::UpdateInfraRed()
 {
-    if (values.empty())
-        return 0.0;
-    std::vector<double> sorted = values;
-    std::sort(sorted.begin(), sorted.end());
-    size_t mid = sorted.size() / 2;
-    return sorted[mid];
-}
-
-//Create an accessor function
-double InfraRedSubsystem::GetIRLeftDistance()
-{
-    return irLeftValue;
-}
-
-double InfraRedSubsystem::GetIRRightDistance()
-{
-    return irRightValue;
-}
-
-void InfraRedSubsystem::InfraRedSubsystemStartThread(){
-    LOG_THREAD("IR Sensors iniialized.")
-    
-}
-
-void InfraRedSubsystem::IRWorker()
-{
-    irSideRight = new frc::AnalogInput(Constants::IRSensors::RIGHT);
-    irSideLeft = new frc::AnalogInput(Constants::IRSensors::LEFT);
+    if (irSideLeft && irSideRight == nullptr) {
+         irSideRight = new frc::AnalogInput(Constants::IRSensors::RIGHT);
+        irSideLeft = new frc::AnalogInput(Constants::IRSensors::LEFT);
+    }
 
     const size_t maxSamples = 9;
-
-while (!irStopThread.load())
-{
     double vLeft = irSideLeft->GetAverageVoltage();
     double vRight = irSideRight->GetAverageVoltage();
 
@@ -74,19 +43,31 @@ while (!irStopThread.load())
     if (!irSideRightValueList.empty())
         irRightValue = getMedian(irSideRightValueList);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(Constants::Ultrasonic::SENSOR_UPDATE_RATE));
 }
 
+double InfraRedSubsystem::getMedian(std::vector<double> &values)
+{
+    if (values.empty())
+        return 0.0;
+    std::vector<double> sorted = values;
+    std::sort(sorted.begin(), sorted.end());
+    size_t mid = sorted.size() / 2;
+    return sorted[mid];
+}
+
+double InfraRedSubsystem::GetIRLeftDistance()
+{
+    return irLeftValue;
+}
+
+double InfraRedSubsystem::GetIRRightDistance()
+{
+    return irRightValue;
 }
 
 bool InfraRedSubsystem::IRDistanceSimilar()
 {
     double IRDistance = GetIRLeftDistance()-GetIRRightDistance();
-
-    if(IRDistance > -1 && IRDistance < 1)
-    {
-        return true;
-    }
-
+    if(IRDistance > -1 && IRDistance < 1) {return true;}
     return false;
 }

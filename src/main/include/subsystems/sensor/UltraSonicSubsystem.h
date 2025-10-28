@@ -10,12 +10,11 @@ class UltraSonicSubsystem
 public:
     UltraSonicSubsystem();
     ~UltraSonicSubsystem();
-    void UltraSonicStartThread();
     double getSonicLeftDistance();
     double getSonicRightDistance();
+    void UpdateUltraSonic();
 
 private:
-    void UltraSonicWorker();
     double getMedian(std::vector<double> &values);
     double leftValue;
     double rightValue;
@@ -24,6 +23,4 @@ private:
     frc::Ultrasonic *sideLeft;
     std::vector<double> sideLeftValueList;
     std::vector<double> sideRightValueList;
-    std::thread workerThread;
-    std::atomic<bool> stopThread;
 };
