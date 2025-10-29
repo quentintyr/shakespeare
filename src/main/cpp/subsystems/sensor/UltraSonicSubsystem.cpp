@@ -78,10 +78,10 @@ void UltraSonicSubsystem::UpdateUltraSonic()
 
 double UltraSonicSubsystem::getSonicRightDistance()
 {
-    return rightValue;
+    return rightValue / 10.0;
 }
 
 double UltraSonicSubsystem::getSonicLeftDistance()
 {
-    return leftValue;
+    return leftValue / 10.0;
 }
