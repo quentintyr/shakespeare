@@ -9,7 +9,6 @@
 #include "subsystems/sensor/UltraSonicSubsystem.h"
 #include "subsystems/sensor/InfraRedSubsystem.h"
 
-
 class SensorManager
 {
 public:
@@ -18,11 +17,14 @@ public:
     void SensorManagerStartThread();
     void SensorWorker();
 
+    // Getter methods to access sensor instances
+    UltraSonicSubsystem *GetUltraSonicSubsystem();
+    InfraRedSubsystem *GetInfraRedSubsystem();
+
 private:
     std::thread workerThread;
     std::atomic<bool> stopThread;
 
     std::unique_ptr<UltraSonicSubsystem> ultraSonic;
     std::unique_ptr<InfraRedSubsystem> infraRed;
-
 };
