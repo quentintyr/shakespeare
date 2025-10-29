@@ -16,18 +16,17 @@
 #include <frc/DriverStation.h>
 
 Gamepad gamepad;
-// SensorManager sensormanager;
+SensorManager sensormanager;
 
-void Robot::RobotInit() {
+void Robot::RobotInit()
+{
   InitLogging();
   SetupLogging();
   LOG_INFO("Initializing Robot...");
-  // sensormanager.SensorManagerStartThread();
-  // ElevatorUpDown::ElevatorSubsystem::init(&amcu);   
+  sensormanager.SensorManagerStartThread();
+  // ElevatorUpDown::ElevatorSubsystem::init(&amcu);
   // ElevatorUpDown::ElevatorSubsystem::calibrate();
-  
-  }
-  
+}
 
 /**
  * This function is called every robot packet, no matter the mode. Use
@@ -37,18 +36,19 @@ void Robot::RobotInit() {
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() { 
+void Robot::RobotPeriodic()
+{
   frc2::CommandScheduler::GetInstance().Run();
-  UpdateLogging();
+  UpdateLogging(&sensormanager);
 }
-
 
 /**
  * This function is called once each time the robot enters Disabled mode. You
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() {
+void Robot::DisabledInit()
+{
   LOG_DISABLED(" Disabled.");
 }
 
@@ -58,35 +58,33 @@ void Robot::DisabledPeriodic() {}
  * This autonomous runs the autonomous command selected by your {@link
  * RobotContainer} class.
  */
-void Robot::AutonomousInit() {
+void Robot::AutonomousInit()
+{
   last_mode = {LOG_PURPLE, "[AUTONOMOUS]"};
   LOG_AUTONOMOUS("Enabled");
-
 }
 
-
-void Robot::AutonomousPeriodic() {
-
-
+void Robot::AutonomousPeriodic()
+{
 }
 
-void Robot::TeleopInit() {
+void Robot::TeleopInit()
+{
   // This makes sure that the autonomous stops running when
   // teleop starts running. If you want the autonomous to
   // continue until interrupted by another command, remove
   // this line or comment it out.
   last_mode = {LOG_CYAN, "[TELEOP]"};
   LOG_TELEOP("Enabled.");
-
 }
 
 /**
  * This function is called periodically during operator control.
  */
-void Robot::TeleopPeriodic() {
+void Robot::TeleopPeriodic()
+{
 
   gamepad.Periodic();
-
 }
 
 /**
@@ -95,7 +93,6 @@ void Robot::TeleopPeriodic() {
 void Robot::TestPeriodic() {}
 
 void Robot::TestInit() {}
-
 
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
