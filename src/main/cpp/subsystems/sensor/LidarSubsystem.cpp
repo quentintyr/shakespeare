@@ -1,42 +1,30 @@
-// #include "subsystems/sensor/LidarSubsystem.h"
-// #include "web-ds-logger/src/LoggingSystem.h"
-// #include "studica/Cobra.h"
+#include "subsystems/sensor/LidarSubsystem.h"
+#include "web-ds-logger/src/LoggingSystem.h"
+#include <sstream>
+#include <iostream>
 
-// #include <sstream>  
-// #include <string>   
+LidarSubsystem::LidarSubsystem() {
+    lidar = nullptr;
+}
 
-// studica::Lidar lidar{studica::Lidar::Port::kUSB1};
+LidarSubsystem::~LidarSubsystem() {
 
-// LidarSubsystem::LidarSubsystem() {
-//     lidar.Start();
-//     lidar.EnableFilter(studica::Lidar::Filter::kMEDIAN, true);
+}
 
-//     studica::Lidar::ScanData scanData = lidar.GetData();
+void LidarSubsystem::UpdateLidar() {
+    try {
+        if (lidar == nullptr) {
+            lidar = std::make_unique<studica::Lidar>(studica::Lidar::Port::kUSB1);
+            lidar->Start();
+            lidar->EnableFilter(studica::Lidar::Filter::kMEDIAN, true);
+        }
+        cachedScanData = lidar->GetData();
 
-//     std::stringstream ss;
-//     ss << "Angle: " << scanData.angle[180] << ", Distance: " << scanData.distance[180] / 10 << "cm";
-//     std::string logMsg = ss.str();
-//     LOG_INFO(logMsg);
-// }
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+}
 
-// LidarSubsystem::~LidarSubsystem() {
-
-// }
-
-// void LidarSubsystem::LidarStartThread() {
-
-// }
-
-// void LidarSubsystem::LidarWorker() {
-
-// }
-// /**
-//  * Available Angles: 0 - 360 deg
-// */
-// double LidarSubsystem::getMedianDistanceOfAngle(int angle) {
-//     studica::Lidar::ScanData data = lidar.GetData();
-//     return data.angle[angle];
-// }
-
-
-
+double LidarSubsystem::getMedianDistanceOfAngle(int angle) {
+    return cachedScanData.distance[angle];
+}
