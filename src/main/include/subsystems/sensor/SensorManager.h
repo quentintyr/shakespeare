@@ -8,6 +8,7 @@
 #include "Constants.h"
 #include "subsystems/sensor/UltraSonicSubsystem.h"
 #include "subsystems/sensor/InfraRedSubsystem.h"
+#include "subsystems/sensor/LidarSubsystem.h"
 
 class SensorManager
 {
@@ -20,6 +21,7 @@ public:
     // Getter methods to access sensor instances
     UltraSonicSubsystem *GetUltraSonicSubsystem();
     InfraRedSubsystem *GetInfraRedSubsystem();
+    LidarSubsystem *GetLidarSubsystem();
 
 private:
     std::thread workerThread;
@@ -27,4 +29,5 @@ private:
 
     std::unique_ptr<UltraSonicSubsystem> ultraSonic;
     std::unique_ptr<InfraRedSubsystem> infraRed;
+    std::unique_ptr<LidarSubsystem> lidar;
 };

@@ -1,5 +1,6 @@
 #include "subsystems/sensor/UltraSonicSubsystem.h"
 #include "subsystems/sensor/InfraRedSubsystem.h"
+#include "subsystems/sensor/LidarSubsystem.h"
 #include "subsystems/sensor/LineFollowerSubsystem.h"
 #include "web-ds-logger/src/LoggingSystem.h"
 #include "subsystems/sensor/SensorManager.h"
@@ -15,6 +16,7 @@ SensorManager::SensorManager()
 
     ultraSonic = std::make_unique<UltraSonicSubsystem>();
     infraRed = std::make_unique<InfraRedSubsystem>();
+    lidar = std::make_unique<LidarSubsystem>();
 }
 
 SensorManager::~SensorManager()
@@ -30,6 +32,7 @@ void SensorManager::SensorWorker()
     {
         ultraSonic->UpdateUltraSonic();
         infraRed->UpdateInfraRed();
+        lidar->UpdateLidar();
 
         std::this_thread::sleep_for(std::chrono::milliseconds(Constants::Ultrasonic::SENSOR_UPDATE_RATE));
     }
@@ -49,4 +52,9 @@ UltraSonicSubsystem *SensorManager::GetUltraSonicSubsystem()
 InfraRedSubsystem *SensorManager::GetInfraRedSubsystem()
 {
     return infraRed.get();
+}
+
+LidarSubsystem *SensorManager::GetLidarSubsystem()
+{
+    return lidar.get();
 }
